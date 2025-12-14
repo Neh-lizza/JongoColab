@@ -1,0 +1,184 @@
+
+
+# ✅ **ALL PAGES (FINAL LIST)**
+
+## **PUBLIC (No Login Required)**
+
+### **1. Landing Page**
+
+Intro to the platform, features, CTA to login/register.
+
+### **2. Login Page**
+
+Email + password form.
+
+### **3. Registration Page**
+
+Create student/supervisor account.
+
+### **4. Terms & Conditions Page**
+
+Platform rules.
+
+### **5. About Page**
+
+Brief info about the system/company.
+
+---
+
+## **STUDENT PAGES (After Login)**
+
+### **6. Student Dashboard**
+
+Shows tasks assigned to the student, deadlines, announcements.
+
+### **7. Task Details Page**
+
+Full description of one task.
+
+### **8. Task Submission Page**
+
+Upload/submit task files.
+
+### **9. Student Profile Page**
+
+View and edit personal info.
+
+### **10. Notifications Page**
+
+All alerts (tasks, announcements).
+
+### **11. Chat Page (Student Chat)**
+
+Real-time messaging with peers and supervisors.
+
+### **12. Resources / Documents Page**
+
+Download files provided by supervisors or admins.
+
+---
+
+## **SUPERVISOR PAGES**
+
+### **13. Supervisor Dashboard**
+
+Overview of assigned students and tasks.
+
+### **14. Assign Task Page**
+
+Create tasks for selected students or groups.
+
+### **15. Review Submissions Page**
+
+View submitted work and mark as reviewed.
+
+### **16. Student List Page**
+
+List of all students under the supervisor.
+
+### **17. View Student Profile Page**
+
+Supervisor-only view of a student's profile.
+
+---
+
+## **ADMIN PAGES**
+
+### **18. Admin Dashboard**
+
+Overview of users, activities, and stats.
+
+### **19. User Management Page**
+
+Approve, ban, or update students/supervisors.
+
+### **20. Institutions / Departments Page**
+
+Add/edit schools or departments.
+
+### **21. Reports Page**
+
+Download or view system-wide reports.
+
+### **22. System Settings Page**
+
+Manage global settings (roles, permissions, platform config).
+
+---
+
+## **SHARED SYSTEM PAGES**
+
+### **23. Edit Profile Page**
+
+Update account info.
+
+### **24. Change Password Page**
+
+Reset or update password.
+
+### **25. 404 Error Page**
+
+Shown when a route doesn’t exist.
+
+---
+18. Admin Dashboard
+
+Shows:
+
+Number of pending accounts
+
+Number of active students/supervisors
+
+Quick actions (approve users, manage institutions, etc.)
+
+19. Pending Accounts Page
+
+All newly registered users waiting for approval.
+Admin can:
+
+Approve
+
+Reject
+
+Assign role (Student / Supervisor)
+
+20. User Management Page
+
+Manage existing accounts:
+
+Edit user details
+
+Suspend/ban user
+
+Reset passwords
+
+Switch role (optional)
+
+21. Institutions / Departments Page
+
+Admin creates and manages schools, departments, or internship categories.
+
+22. Reports Page
+
+System activity logs, user statistics, downloads.
+
+23. System Settings Page
+
+General settings:
+
+Email templates
+
+Role permissions
+
+Platform-wide configuration
+
+🧩 ADJUSTMENT TO THE MAIN FLOW
+Registration → Pending Page
+
+After someone registers, they see a page like:
+
+“Your account is pending approval by the admin.
+You will receive an email when your account is activated.”
+
+They cannot log in until approved.
+
