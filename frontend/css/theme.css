@@ -1,0 +1,427 @@
+/* ==========================
+   JONGO COLLAB NEON THEME
+   White Background + Neon Accents
+   Purple, Green, Cyan
+=========================== */
+
+/* === Root Variables === */
+:root {
+  /* Backgrounds */
+  --color-bg-main: #FFFFFF;           /* Pure white main background */
+  --color-bg-secondary: #F8F9FA;      /* Light gray secondary */
+  --color-bg-card: #FFFFFF;           /* White cards */
+  
+  /* Text Colors */
+  --color-text-primary: #1A1A1A;      /* Dark text */
+  --color-text-secondary: #6B7280;    /* Gray text */
+  --color-text-muted: #9CA3AF;        /* Muted text */
+  
+  /* Borders */
+  --color-border: #E5E7EB;            /* Light gray border */
+  --color-border-hover: #D1D5DB;      /* Darker border on hover */
+  
+  /* Neon Colors */
+  --color-neon-purple: #CC00FF;       /* Neon Purple */
+  --color-neon-green: #00FF88;        /* Neon Green */
+  --color-neon-cyan: #00FFFF;         /* Neon Cyan */
+  --color-neon-pink: #FF00FF;         /* Neon Pink */
+  --color-neon-blue: #0088FF;         /* Neon Blue */
+  
+  /* Primary (Purple) */
+  --color-accent: #CC00FF;            /* Main accent color */
+  --color-accent-hover: #E600FF;      /* Brighter on hover */
+  --color-accent-light: rgba(204, 0, 255, 0.1);  /* Light purple bg */
+  
+  /* Secondary (Green) */
+  --color-success: #00FF88;
+  --color-success-light: rgba(0, 255, 136, 0.1);
+  
+  /* Tertiary (Cyan) */
+  --color-info: #00FFFF;
+  --color-info-light: rgba(0, 255, 255, 0.1);
+  
+  /* Status Colors */
+  --color-error: #FF4444;
+  --color-warning: #FFB800;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+  --shadow-neon-purple: 0 0 20px rgba(204, 0, 255, 0.3);
+  --shadow-neon-green: 0 0 20px rgba(0, 255, 136, 0.3);
+  --shadow-neon-cyan: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+/* === Global Styles === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg-main);
+  color: var(--color-text-primary);
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === Typography === */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text-primary);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+p {
+  color: var(--color-text-secondary);
+}
+
+/* === Links === */
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* === Cards === */
+.card {
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md), var(--shadow-neon-purple);
+  transform: translateY(-2px);
+}
+
+/* === Buttons === */
+.button, .btn {
+  background-color: var(--color-accent);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-neon-purple);
+}
+
+.button:hover, .btn:hover {
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 0 30px rgba(204, 0, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.button-secondary, .btn-secondary {
+  background-color: transparent;
+  border: 2px solid var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: none;
+}
+
+.button-secondary:hover, .btn-secondary:hover {
+  background-color: var(--color-accent);
+  color: white;
+  box-shadow: var(--shadow-neon-purple);
+}
+
+.button-success, .btn-success {
+  background-color: var(--color-success);
+  box-shadow: var(--shadow-neon-green);
+}
+
+.button-success:hover, .btn-success:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+}
+
+.button-info, .btn-info {
+  background-color: var(--color-info);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-neon-cyan);
+}
+
+.button-info:hover, .btn-info:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+}
+
+/* === Inputs & Forms === */
+input, textarea, select {
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  color: var(--color-text-primary);
+  padding: 12px 16px;
+  border-radius: 10px;
+  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px var(--color-accent-light), var(--shadow-neon-purple);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* === Tables === */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-bg-card);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+table th, table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+table th {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+table tr:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+/* === Badges === */
+.badge {
+  background-color: var(--color-accent);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-success {
+  background-color: var(--color-success);
+  color: var(--color-text-primary);
+}
+
+.badge-info {
+  background-color: var(--color-info);
+  color: var(--color-text-primary);
+}
+
+.badge-outline {
+  background-color: transparent;
+  border: 2px solid var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* === Alerts === */
+.alert {
+  padding: 16px 20px;
+  border-radius: 12px;
+  border-left: 4px solid;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.alert-success {
+  background-color: var(--color-success-light);
+  border-color: var(--color-success);
+  color: var(--color-text-primary);
+}
+
+.alert-error {
+  background-color: rgba(255, 68, 68, 0.1);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.alert-warning {
+  background-color: rgba(255, 184, 0, 0.1);
+  border-color: var(--color-warning);
+  color: #8B6000;
+}
+
+.alert-info {
+  background-color: var(--color-info-light);
+  border-color: var(--color-info);
+  color: var(--color-text-primary);
+}
+
+/* === Sidebar === */
+.sidebar {
+  width: 280px;
+  background-color: var(--color-bg-card);
+  border-right: 2px solid var(--color-border);
+  height: 100vh;
+  padding: 24px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  box-shadow: var(--shadow-md);
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  color: var(--color-text-secondary);
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.sidebar a:hover {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+.sidebar a.active {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-neon-pink) 100%);
+  color: white;
+  box-shadow: var(--shadow-neon-purple);
+}
+
+/* === Topbar === */
+.topbar {
+  background-color: var(--color-bg-card);
+  border-bottom: 2px solid var(--color-border);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-neon-pink) 100%);
+  border-radius: 10px;
+  border: 2px solid var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--color-accent-hover) 0%, var(--color-neon-pink) 100%);
+}
+
+/* === Utility Classes === */
+.text-primary { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-muted { color: var(--color-text-muted); }
+.text-accent { color: var(--color-accent); }
+.text-success { color: var(--color-success); }
+.text-info { color: var(--color-info); }
+
+.bg-primary { background-color: var(--color-bg-main); }
+.bg-secondary { background-color: var(--color-bg-secondary); }
+.bg-card { background-color: var(--color-bg-card); }
+
+.border { border: 2px solid var(--color-border); }
+.border-accent { border-color: var(--color-accent); }
+.rounded { border-radius: 10px; }
+.rounded-lg { border-radius: 16px; }
+.rounded-full { border-radius: 9999px; }
+
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+.shadow-neon { box-shadow: var(--shadow-neon-purple); }
+
+/* === Gradient Text === */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-success) 50%, var(--color-info) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-purple-green {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-success) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-purple-cyan {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-info) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* === Neon Glow Effects === */
+.neon-glow-purple {
+  box-shadow: 0 0 20px rgba(204, 0, 255, 0.4), 0 0 40px rgba(204, 0, 255, 0.2);
+}
+
+.neon-glow-green {
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.4), 0 0 40px rgba(0, 255, 136, 0.2);
+}
+
+.neon-glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4), 0 0 40px rgba(0, 255, 255, 0.2);
+}
+
+/* === Animations === */
+@keyframes pulse-neon {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(204, 0, 255, 0.4);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 30px rgba(204, 0, 255, 0.6);
+  }
+}
+
+.pulse-neon {
+  animation: pulse-neon 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}

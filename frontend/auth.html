@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Sign Up - JongoCollab</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Auth Container */
+        .auth-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Left Side - Branding */
+       /* Left Section */
+.auth-left {
+    width: 50%;
+    height: 100vh;
+    position: relative;
+    padding: 50px 40px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    overflow: hidden;
+}
+
+/* Background Image */
+.auth-background-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('hero1.jpg'); /* replace image */
+    background-size: cover;
+    background-position: center;
+    opacity: 0.35;
+    z-index: 1;
+}
+
+/* Gradient overlay */
+.gradient-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom right, rgba(0,0,0,0.6), rgba(0,0,0,0.8));
+    z-index: 2;
+}
+
+/* Content sits above image */
+.auth-left-content {
+    position: relative;
+    z-index: 3;
+}
+
+/* Logo text */
+.auth-logo {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 35px;
+}
+
+/* Heading + paragraph */
+.auth-hero-text h1 {
+    font-size: 38px;
+    line-height: 1.3;
+    margin-bottom: 15px;
+}
+
+.auth-hero-text p {
+    font-size: 16px;
+    max-width: 350px;
+    line-height: 1.5;
+    opacity: 0.95;
+}
+
+/* Dots */
+.auth-dots {
+    display: flex;
+    gap: 8px;
+    margin-top: 25px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background: #bbb;
+    border-radius: 50%;
+}
+
+.dot.active {
+    background: #fff;
+}
+
+/* Mobile */
+@media(max-width: 900px) {
+    .auth-left {
+        width: 100%;
+        height: auto;
+        padding: 35px 25px;
+    }
+}
+
+        /* Right Side - Forms */
+        .auth-right {
+            flex: 1;
+            background: var(--color-bg-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+        }
+
+        .auth-form-container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 32px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: var(--color-accent);
+            transform: translateX(-4px);
+        }
+
+        /* Form Wrapper Toggle */
+        .auth-form-wrapper {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .auth-form-wrapper.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Auth Header */
+        .auth-header {
+            margin-bottom: 32px;
+        }
+
+        .auth-header h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--color-text-primary);
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: var(--color-text-secondary);
+            font-size: 15px;
+        }
+
+        .link-accent {
+            color: var(--color-accent);
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .link-accent:hover {
+            color: var(--color-accent-hover);
+            text-decoration: underline;
+        }
+
+        /* Form Groups */
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        /* Input with Icon */
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon input {
+            padding-right: 48px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            padding: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-password:hover {
+            color: var(--color-accent);
+        }
+
+        /* Form Options */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--color-accent);
+        }
+
+        .checkbox-label {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+        }
+
+        .forgot-link {
+            color: var(--color-accent);
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .forgot-link:hover {
+            color: var(--color-accent-hover);
+            text-decoration: underline;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 24px 0;
+            color: var(--color-text-muted);
+            font-size: 14px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .divider span {
+            padding: 0 16px;
+        }
+
+        /* Social Buttons */
+        .social-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-social {
+            padding: 12px;
+            border: 2px solid var(--color-border);
+            background: transparent;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+/* Auth Buttons */
+.btn-auth {
+    width: 100%;
+    padding: 14px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--color-accent);
+    color: white;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 18px rgba(255, 0, 221, 0.35);
+}
+
+.btn-auth:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(255, 0, 221, 0.5);
+}
+
+.btn-auth:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 12px rgba(255, 0, 221, 0.4);
+}
+
+        .btn-social:hover {
+            border-color: var(--color-accent);
+            background: var(--color-accent-light);
+            color: var(--color-accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .auth-left {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .auth-right {
+                padding: 24px;
+            }
+
+            .auth-header h2 {
+                font-size: 28px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .social-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>JongoColab</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="landing.html">home</a></li>
+                
+                <li><a href="#about">About</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="auth.html" class="btn-ghost">Sign In</a>
+                <a href="auth.html" class="btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
+    <div class="auth-container">
+        <!-- Left Side - Branding -->
+       <!-- Left Side - Branding -->
+<div class="auth-left">
+    <div class="auth-background-image"></div>
+
+    <div class="auth-left-content">
+        <div class="auth-logo">
+            JongoColab
+        </div>
+        
+        <div class="auth-hero-text">
+            <h1>Connect, Collaborate,<br>Create Together</h1>
+            <p>Join thousands of students sharing projects and building the future.</p>
+        </div>
+
+        <div class="auth-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+
+    <div class="gradient-overlay"></div>
+</div>
+
+
+        <!-- Right Side - Forms -->
+        <div class="auth-right">
+            <div class="auth-form-container">
+                
+
+                <!-- LOGIN FORM -->
+                <div class="auth-form-wrapper active" id="loginFormWrapper">
+                    <div class="auth-header">
+                        <h2>Welcome back</h2>
+                        <p>Don't have an account? <a href="#" class="link-accent" onclick="toggleForm('signup')">Sign up</a></p>
+                    </div>
+
+                    <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input 
+                                type="email" 
+                                id="loginEmail" 
+                                placeholder="Enter your email"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <div class="input-with-icon">
+                                <input 
+                                    type="password" 
+                                    id="loginPassword" 
+                                    placeholder="Enter your password"
+                                    required
+                                >
+                                <button type="button" class="toggle-password" onclick="togglePassword('loginPassword')">
+                                    👁️
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="remember">
+                                <span class="checkbox-label">Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-link" onclick="showForgotPassword()">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn-auth">
+                            <span>Sign in</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- SIGN UP FORM -->
+                <div class="auth-form-wrapper" id="signupFormWrapper">
+                    <div class="auth-header">
+                        <h2>Create an account</h2>
+                        <p>Already have an account? <a href="#" class="link-accent" onclick="toggleForm('login')">Log in</a></p>
+                    </div>
+
+                    <form class="auth-form" id="signupForm" onsubmit="handleSignup(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First name</label>
+                                <input 
+                                    type="text" 
+                                    id="firstName" 
+                                    placeholder="First name"
+                                    required
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last name</label>
+                                <input 
+                                    type="text" 
+                                    id="lastName" 
+                                    placeholder="Last name"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signupEmail">Email</label>
+                            <input 
+                                type="email" 
+                                id="signupEmail" 
+                                placeholder="Enter your email"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="institution">Institution</label>
+                            <select id="institution" required>
+                                <option value="">Select your institution</option>
+                                <option value="CUIB">Catholic University Institute of Buea (CUIB)</option>
+                                <option value="UB">University of Buea (UB)</option>
+                                <option value="Landmark">Landmark University</option>
+                                <option value="MIT">Massachusetts Institute of Technology (MIT)</option>
+                                <option value="Stanford">Stanford University</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="department">Option</label>
+                            <select id="department" required>
+                                <option value="">Option</option>
+                                <option value="software">Software Engineering</option>
+                                <option value="ai">Artificial Intelligence</option>
+                                <option value="networking">Networking</option>
+                                <option value="hardware">Hardware Engineering</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <div class="input-with-icon">
+                                <input 
+                                    type="password" 
+                                    id="signupPassword" 
+                                    placeholder="Create a password"
+                                    required
+                                    minlength="8"
+                                >
+                                <button type="button" class="toggle-password" onclick="togglePassword('signupPassword')">
+                                    👁️
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm password</label>
+                            <div class="input-with-icon">
+                                <input 
+                                    type="password" 
+                                    id="confirmPassword" 
+                                    placeholder="Confirm your password"
+                                    required
+                                    minlength="8"
+                                >
+                                <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
+                                    👁️
+                                </button>
+                            </div>
+                        </div>
+
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="agreeTerms" required>
+                            <span class="checkbox-label">I agree to the <a href="#" class="link-accent">Terms & Conditions</a></span>
+                        </label>
+
+                        <button type="submit" class="btn-auth">
+                            <span>Create account</span>
+                        </button>
+
+                      
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer" class="alert-container"></div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>JongoColab</span>
+                    </div>
+                    <p>Empowering student collaboration across universities.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h5>Product</h5>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#institutions">Institutions</a></li>
+                        <li><a href="signup.html">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Resources</h5>
+                    <ul>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#help">Help Center</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Legal</h5>
+                    <ul>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#cookies">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 JongoHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/landing.js"></script>
+     <script src="js/auth.js"></script>
+</body>
+</html>
+
+    <script>
+      
+
+        // Update decorative dots
+        function updateDots(activeIndex) {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === activeIndex);
+            });
+        }
+
+        // Show forgot password
+        function showForgotPassword() {
+            const email = prompt('Enter your email address:');
+            if (email) {
+                showAlert('Password reset link sent to ' + email, 'success');
+            }
+        }
+    </script>
+</body>
+</html>

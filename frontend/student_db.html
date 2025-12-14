@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - JongoHub</title>
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/student_db.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <div class="dashboard-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>JongoColab</span>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link active" data-page="overview">
+            <i class="fas fa-chart-line"></i>
+            <span>Overview</span>
+          </a>
+        </li>
+        <li class="nav-item">
+    <a href="#" class="nav-link" onclick="navigateToMyProjects(); return false;">
+      <i class="fas fa-folder"></i>
+      <span>My Projects</span>
+    </a>
+  </li>
+        <li class="nav-item">
+    <a href="#" class="nav-link" onclick="navigateToCommunity(); return false;">
+      <i class="fas fa-users"></i>
+      <span>Community</span>
+    </a>
+  </li>
+        <li class="nav-item">
+  <a href="#" class="nav-link" data-page="chat" onclick="navigateToSchoolChat(); return false;">
+    <i class="fas fa-comments"></i>
+    <span>School Chat</span>
+    <span class="badge-count">3</span>
+  </a>
+</li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-page="collaborations">
+            <i class="fas fa-handshake"></i>
+            <span>Collaborations</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-page="analytics">
+            <i class="fas fa-chart-pie"></i>
+            <span>Analytics</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-page="resources">
+            <i class="fas fa-book"></i>
+            <span>Resources</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="upgrade-card">
+        <i class="fas fa-crown"></i>
+        <h3>Upgrade to Pro</h3>
+        <p>Unlock premium features and unlimited storage</p>
+        <button class="btn-upgrade">Upgrade Now</button>
+      </div>
+
+      <ul class="nav-menu nav-bottom">
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-page="settings">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-question-circle"></i>
+            <span>Help Center</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Log Out</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      
+      <!-- Header -->
+      <div class="dashboard-header">
+        <div class="header-left">
+          <button class="mobile-menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1>Dashboard</h1>
+        </div>
+        <div class="header-right">
+          <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search projects, users...">
+          </div>
+          <button class="icon-btn notification-btn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-dot"></span>
+          </button>
+          <div class="user-profile">
+            <div class="user-avatar">
+              <img src="https://via.placeholder.com/45/CC00FF/FFFFFF?text=ST" alt="Student">
+            </div>
+            <div class="user-info">
+              <span class="user-name">Student Name</span>
+              <span class="user-institution">CUIB</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Time Filter -->
+      <div class="time-filter">
+        <button class="filter-btn">Day</button>
+        <button class="filter-btn">Week</button>
+        <button class="filter-btn active">Month</button>
+        <button class="filter-btn">Year</button>
+        <div class="date-range">
+          <i class="fas fa-calendar"></i>
+          <span id="dateRangeText">1 Nov 2024 - 30 Nov 2024</span>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card primary">
+          <div class="stat-header">
+            <span class="stat-title">Total Projects</span>
+            <i class="fas fa-folder-open stat-icon"></i>
+          </div>
+          <div class="stat-value">24</div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>+12% from last month</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Collaborations</span>
+            <i class="fas fa-users stat-icon"></i>
+          </div>
+          <div class="stat-value">18</div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>+8 from last month</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Contributions</span>
+            <i class="fas fa-code stat-icon"></i>
+          </div>
+          <div class="stat-value">156</div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>+45 this week</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Impact Score</span>
+            <i class="fas fa-trophy stat-icon"></i>
+          </div>
+          <div class="stat-value">850</div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>+15% this month</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons Section -->
+<div class="action-buttons">
+  <button class="action-btn btn-upload">
+    <i class="fas fa-plus"></i>
+    <span>Upload Project</span>
+  </button>
+  <button class="action-btn btn-collaborate">
+    <i class="fas fa-handshake"></i>
+    <span>Find Collaborators</span>
+  </button>
+  <button class="action-btn btn-join-chat" onclick="navigateToSchoolChat()">
+    <i class="fas fa-comments"></i>
+    <span>Join School Chat</span>
+  </button>
+</div>
+
+      <!-- Charts and Calendar Row -->
+      <div class="dashboard-row">
+        
+        <!-- Activity Chart -->
+        <div class="chart-card">
+          <div class="card-header">
+            <h3 class="card-title">Monthly Activity</h3>
+            <div class="card-actions">
+              <button class="icon-btn">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+              <button class="icon-btn">
+                <i class="fas fa-external-link-alt"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="chart-container">
+            <div class="chart-column">
+              <div class="chart-bar" style="height: 60%;" data-value="18"></div>
+              <div class="chart-label">Jan</div>
+            </div>
+            <div class="chart-column">
+              <div class="chart-bar" style="height: 55%;" data-value="16"></div>
+              <div class="chart-label">Feb</div>
+            </div>
+            <div class="chart-column">
+              <div class="chart-bar" style="height: 75%;" data-value="22"></div>
+              <div class="chart-label">Mar</div>
+            </div>
+            <div class="chart-column">
+              <div class="chart-bar" style="height: 48%;" data-value="14"></div>
+              <div class="chart-label">Apr</div>
+            </div>
+            <div class="chart-column">
+              <div class="chart-bar" style="height: 85%;" data-value="25"></div>
+              <div class="chart-label">May</div>
+            </div>
+            <div class="chart-column">
+              <div class="chart-bar" style="height: 42%;" data-value="12"></div>
+              <div class="chart-label">Jun</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calendar & Stats -->
+        <div class="calendar-card">
+          <div class="calendar-header">
+            <span class="calendar-month">November 2024</span>
+            <div class="calendar-nav">
+              <button class="icon-btn">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <button class="icon-btn">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="calendar-grid">
+            <div class="calendar-day-header">Mon</div>
+            <div class="calendar-day-header">Tue</div>
+            <div class="calendar-day-header">Wed</div>
+            <div class="calendar-day-header">Thu</div>
+            <div class="calendar-day-header">Fri</div>
+            <div class="calendar-day-header">Sat</div>
+            <div class="calendar-day-header">Sun</div>
+            
+            <div class="calendar-day"></div>
+            <div class="calendar-day"></div>
+            <div class="calendar-day"></div>
+            <div class="calendar-day">1</div>
+            <div class="calendar-day">2</div>
+            <div class="calendar-day">3</div>
+            <div class="calendar-day">4</div>
+            <div class="calendar-day">5</div>
+            <div class="calendar-day">6</div>
+            <div class="calendar-day">7</div>
+            <div class="calendar-day">8</div>
+            <div class="calendar-day">9</div>
+            <div class="calendar-day">10</div>
+            <div class="calendar-day">11</div>
+            <div class="calendar-day">12</div>
+            <div class="calendar-day">13</div>
+            <div class="calendar-day">14</div>
+            <div class="calendar-day">15</div>
+            <div class="calendar-day">16</div>
+            <div class="calendar-day today">17</div>
+            <div class="calendar-day">18</div>
+            <div class="calendar-day">19</div>
+            <div class="calendar-day">20</div>
+            <div class="calendar-day">21</div>
+            <div class="calendar-day">22</div>
+            <div class="calendar-day">23</div>
+            <div class="calendar-day">24</div>
+            <div class="calendar-day">25</div>
+            <div class="calendar-day">26</div>
+            <div class="calendar-day">27</div>
+            <div class="calendar-day">28</div>
+            <div class="calendar-day">29</div>
+            <div class="calendar-day">30</div>
+          </div>
+
+          <div class="community-growth">
+            <div class="growth-header">
+              <div>
+                <h4>Community Impact</h4>
+                <p>Your contribution growth</p>
+              </div>
+              <div class="growth-percentage">+28%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Projects Table -->
+      <div class="activities-card">
+        <div class="card-header">
+          <h3 class="card-title">Recent Projects</h3>
+          <div class="card-actions">
+            <button class="icon-btn">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+            <button class="icon-btn">
+              <i class="fas fa-external-link-alt"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Project Name</th>
+                <th>Institution</th>
+                <th>Date</th>
+                <th>Collaborators</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="activity-info">
+                    <div class="activity-icon purple">
+                      <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div>
+                      <strong>E-Learning Platform</strong>
+                      <div class="project-tags">
+                        <span class="tag">Web Dev</span>
+                        <span class="tag">React</span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>CUIB</td>
+                <td>15 Nov 2024</td>
+                <td>
+                  <div class="collaborators-avatars">
+                    <img src="https://via.placeholder.com/30/00FF88/FFFFFF?text=A" alt="User">
+                    <img src="https://via.placeholder.com/30/CC00FF/FFFFFF?text=B" alt="User">
+                    <span class="more-count">+3</span>
+                  </div>
+                </td>
+                <td><span class="status-badge status-active">Active</span></td>
+                <td><button class="btn-view">View</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="activity-info">
+                    <div class="activity-icon green">
+                      <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div>
+                      <strong>Fitness Tracker App</strong>
+                      <div class="project-tags">
+                        <span class="tag">Mobile</span>
+                        <span class="tag">Flutter</span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>UB</td>
+                <td>8 Nov 2024</td>
+                <td>
+                  <div class="collaborators-avatars">
+                    <img src="https://via.placeholder.com/30/00FFFF/000000?text=C" alt="User">
+                    <img src="https://via.placeholder.com/30/FF00FF/FFFFFF?text=D" alt="User">
+                  </div>
+                </td>
+                <td><span class="status-badge status-completed">Completed</span></td>
+                <td><button class="btn-view">View</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="activity-info">
+                    <div class="activity-icon cyan">
+                      <i class="fas fa-brain"></i>
+                    </div>
+                    <div>
+                      <strong>AI Chatbot</strong>
+                      <div class="project-tags">
+                        <span class="tag">AI/ML</span>
+                        <span class="tag">Python</span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>Landmark</td>
+                <td>22 Nov 2024</td>
+                <td>
+                  <div class="collaborators-avatars">
+                    <img src="https://via.placeholder.com/30/FFB800/000000?text=E" alt="User">
+                    <span class="more-count">+2</span>
+                  </div>
+                </td>
+                <td><span class="status-badge status-pending">In Progress</span></td>
+                <td><button class="btn-view">View</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+<div id="alertContainer" class="alert-container"></div>
+<script src="js/auth.js"></script>
+<script src="js/student_db.js"></script>
+</body>
+</html>

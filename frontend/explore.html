@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Projects - JongoCollab</title>
+  <link rel="stylesheet" href="css/theme.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--color-bg-main);
+      color: var(--color-text-primary);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background-color: var(--color-bg-card);
+      border-right: 2px solid var(--color-border);
+      padding: 24px;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-menu a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      color: var(--color-text-secondary);
+      transition: all 0.2s ease;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .nav-menu a:hover {
+      background-color: var(--color-accent-light);
+      color: var(--color-accent);
+    }
+
+    .nav-menu a.active {
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-neon-pink) 100%);
+      color: white;
+      box-shadow: var(--shadow-neon-purple);
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      padding: 24px 32px;
+      max-width: calc(100% - 340px);
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: var(--color-text-secondary);
+    }
+
+    /* Search Bar */
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 14px 20px;
+      border: 2px solid var(--color-border);
+      border-radius: 12px;
+      background: var(--color-bg-card);
+      color: var(--color-text-primary);
+      font-size: 15px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 4px var(--color-accent-light);
+    }
+
+    .upload-btn {
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-neon-pink) 100%);
+      color: white;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-neon-purple);
+      transition: all 0.3s ease;
+    }
+
+    .upload-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(204, 0, 255, 0.5);
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 48px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    /* Project Grid */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--color-bg-card);
+      border: 2px solid var(--color-border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .project-card:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-md), var(--shadow-neon-purple);
+      transform: translateY(-4px);
+    }
+
+    .project-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-info) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 48px;
+      position: relative;
+    }
+
+    .project-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .project-info {
+      padding: 20px;
+    }
+
+    .project-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--color-text-primary);
+    }
+
+    .project-author {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .school-badge {
+      background: var(--color-accent-light);
+      color: var(--color-accent);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .project-stats {
+      display: flex;
+      gap: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--color-border);
+      font-size: 14px;
+      color: var(--color-text-secondary);
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .project-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid var(--color-border);
+      background: transparent;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .action-btn:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+      background: var(--color-accent-light);
+    }
+
+    .action-btn.download {
+      border-color: var(--color-success);
+      color: var(--color-success);
+    }
+
+    .action-btn.download:hover {
+      background: var(--color-success-light);
+    }
+
+    /* Filter Sidebar */
+    .filter-sidebar {
+      width: 300px;
+      background: var(--color-bg-card);
+      border-left: 2px solid var(--color-border);
+      padding: 24px;
+      position: fixed;
+      right: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .filter-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .filter-section {
+      margin-bottom: 24px;
+    }
+
+    .filter-section-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--color-text-primary);
+    }
+
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      padding: 8px 14px;
+      border: 2px solid var(--color-border);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+      color: var(--color-text-secondary);
+    }
+
+    .chip:hover, .chip.active {
+      border-color: var(--color-accent);
+      background: var(--color-accent);
+      color: white;
+      box-shadow: var(--shadow-neon-purple);
+    }
+
+    .rating-filter {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .star {
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--color-border);
+      transition: all 0.2s ease;
+    }
+
+    .star:hover, .star.active {
+      color: var(--color-warning);
+    }
+
+    .apply-filter-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-neon-pink) 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 24px;
+      box-shadow: var(--shadow-neon-purple);
+      transition: all 0.3s ease;
+    }
+
+    .apply-filter-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(204, 0, 255, 0.5);
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .filter-sidebar {
+        display: none;
+      }
+      .main-content {
+        max-width: calc(100% - 260px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 70px;
+      }
+      .main-content {
+        margin-left: 70px;
+        max-width: calc(100% - 70px);
+      }
+      .logo span {
+        display: none;
+      }
+      .nav-menu a span {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo gradient-text">
+      ⚡ <span>JongoCollab</span>
+    </div>
+    <nav class="nav-menu">
+      <a href="#">
+        <span>🏠</span>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="active">
+        <span>🌍</span>
+        <span>Explore</span>
+      </a>
+      <a href="#">
+        <span>💬</span>
+        <span>Forums</span>
+      </a>
+      <a href="#">
+        <span>📋</span>
+        <span>My Tasks</span>
+      </a>
+      <a href="#">
+        <span>📁</span>
+        <span>My Projects</span>
+      </a>
+      <a href="#">
+        <span>🎓</span>
+        <span>My School</span>
+      </a>
+      <a href="#">
+        <span>⚙️</span>
+        <span>Settings</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <h1 class="gradient-purple-green">Explore Projects</h1>
+      <p>Discover amazing projects shared by students across all schools</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="Search for projects, code, designs...">
+      <button class="upload-btn">
+        <span>➕</span>
+        Upload Project
+      </button>
+    </div>
+
+    <!-- Trending Section -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">🔥 Trending This Week</h2>
+      </div>
+      <div class="project-grid">
+        <div class="project-card">
+          <div class="project-image">
+            <span>🤖</span>
+            <div class="project-badge">AI</div>
+          </div>
+          <div class="project-info">
+            <h3 class="project-title">Smart Chatbot AI</h3>
+            <div class="project-author">
+              <span>👤</span> Sarah Johnson • <span class="school-badge">MIT</span>
+            </div>
+            <div class="project-stats">
+              <div class="stat">❤️ 234</div>
+              <div class="stat">💬 45</div>
+              <div class="stat">⬇️ 128</div>
+            </div>
+            <div class="project-actions">
+              <button class="action-btn">👁️ View</button>
+              <button class="action-btn download">⬇️ Download</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-image" style="background: linear-gradient(135deg, var(--color-success) 0%, var(--color-info) 100%);">
+            <span>💻</span>
+            <div class="project-badge">Software</div>
+          </div>
+          <div class="project-info">
+            <h3 class="project-title">E-Commerce Platform</h3>
+            <div class="project-author">
+              <span>👤</span> Michael Chen • <span class="school-badge">Stanford</span>
+            </div>
+            <div class="project-stats">
+              <div class="stat">❤️ 189</div>
+              <div class="stat">💬 32</div>
+              <div class="stat">⬇️ 98</div>
+            </div>
+            <div class="project-actions">
+              <button class="action-btn">👁️ View</button>
+              <button class="action-btn download">⬇️ Download</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-image" style="background: linear-gradient(135deg, var(--color-neon-pink) 0%, var(--color-warning) 100%);">
+            <span>🎨</span>
+            <div class="project-badge">Design</div>
+          </div>
+          <div class="project-info">
+            <h3 class="project-title">Mobile App UI Kit</h3>
+            <div class="project-author">
+              <span>👤</span> Emma Davis • <span class="school-badge">Berkeley</span>
+            </div>
+            <div class="project-stats">
+              <div class="stat">❤️ 312</div>
+              <div class="stat">💬 67</div>
+              <div class="stat">⬇️ 201</div>
+            </div>
+            <div class="project-actions">
+              <button class="action-btn">👁️ View</button>
+              <button class="action-btn download">⬇️ Download</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-image" style="background: linear-gradient(135deg, var(--color-info) 0%, var(--color-neon-blue) 100%);">
+            <span>🌐</span>
+            <div class="project-badge">Networking</div>
+          </div>
+          <div class="project-info">
+            <h3 class="project-title">Network Monitor Tool</h3>
+            <div class="project-author">
+              <span>👤</span> Alex Kumar • <span class="school-badge">CMU</span>
+            </div>
+            <div class="project-stats">
+              <div class="stat">❤️ 156</div>
+              <div class="stat">💬 28</div>
+              <div class="stat">⬇️ 87</div>
+            </div>
+            <div class="project-actions">
+              <button class="action-btn">👁️ View</button>
+              <button class="action-btn download">⬇️ Download</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Projects -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">🆕 Recently Uploaded</h2>
+      </div>
+      <div class="project-grid">
+        <div class="project-card">
+          <div class="project-image">
+            <span>📊</span>
+            <div class="project-badge">Data Science</div>
+          </div>
+          <div class="project-info">
+            <h3 class="project-title">Sales Analytics Dashboard</h3>
+            <div class="project-author">
+              <span>👤</span> Lisa Anderson • <span class="school-badge">Harvard</span>
+            </div>
+            <div class="project-stats">
+              <div class="stat">❤️ 45</div>
+              <div class="stat">💬 12</div>
+              <div class="stat">⬇️ 23</div>
+            </div>
+            <div class="project-actions">
+              <button class="action-btn">👁️ View</button>
+              <button class="action-btn download">⬇️ Download</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-image" style="background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-success) 100%);">
+            <span>🔐</span>
+            <div class="project-badge">Security</div>
+          </div>
+          <div class="project-info">
+            <h3 class="project-title">Password Manager App</h3>
+            <div class="project-author">
+              <span>👤</span> James Wilson • <span class="school-badge">Oxford</span>
+            </div>
+            <div class="project-stats">
+              <div class="stat">❤️ 78</div>
+              <div class="stat">💬 19</div>
+              <div class="stat">⬇️ 41</div>
+            </div>
+            <div class="project-actions">
+              <button class="action-btn">👁️ View</button>
+              <button class="action-btn download">⬇️ Download</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-image" style="background: linear-gradient(135deg, var(--color-success) 0%, var(--color-neon-cyan) 100%);">
+            <span>🎮</span>
+            <div class="project-badge">Game Dev</div>
+          </div>
+          <div class="project-info">
+            <h3 class="project-title">2D Platformer Game</h3>
+            <div class="project-author">
+              <span>👤</span> Nina Patel • <span class="school-badge">UCLA</span>
+            </div>
+            <div class="project-stats">
+              <div class="stat">❤️ 167</div>
+              <div class="stat">💬 34</div>
+              <div class="stat">⬇️ 92</div>
+            </div>
+            <div class="project-actions">
+              <button class="action-btn">👁️ View</button>
+              <button class="action-btn download">⬇️ Download</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-image" style="background: linear-gradient(135deg, var(--color-neon-blue) 0%, var(--color-neon-pink) 100%);">
+            <span>📱</span>
+            <div class="project-badge">Mobile</div>
+          </div>
+          <div class="project-info">
+            <h3 class="project-title">Fitness Tracker App</h3>
+            <div class="project-author">
+              <span>👤</span> David Lee • <span class="school-badge">Caltech</span>
+            </div>
+            <div class="project-stats">
+              <div class="stat">❤️ 203</div>
+              <div class="stat">💬 48</div>
+              <div class="stat">⬇️ 115</div>
+            </div>
+            <div class="project-actions">
+              <button class="action-btn">👁️ View</button>
+              <button class="action-btn download">⬇️ Download</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Sidebar -->
+  <div class="filter-sidebar">
+    <div class="filter-header">
+      <h3 class="filter-title">Filter Projects</h3>
+      <button style="border: none; background: none; color: var(--color-accent); cursor: pointer; font-weight: 600;">Reset</button>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-title">Project Type</div>
+      <div class="filter-chips">
+        <button class="chip active">All</button>
+        <button class="chip">Code</button>
+        <button class="chip">Design</button>
+        <button class="chip">Documentation</button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-title">Department</div>
+      <div class="filter-chips">
+        <button class="chip">Software</button>
+        <button class="chip">AI</button>
+        <button class="chip">Networking</button>
+        <button class="chip">Hardware</button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-title">School</div>
+      <div class="filter-chips">
+        <button class="chip">MIT</button>
+        <button class="chip">Stanford</button>
+        <button class="chip">Berkeley</button>
+        <button class="chip">Harvard</button>
+        <button class="chip">CMU</button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-section-title">Rating</div>
+      <div class="rating-filter">
+        <span class="star active">★</span>
+        <span class="star active">★</span>
+        <span class="star active">★</span>
+        <span class="star active">★</span>
+        <span class="star">★</span>
+      </div>
+    </div>
+
+    <button class="apply-filter-btn">Apply Filters</button>
+  </div>
+
+  <script>
+    // Filter chips toggle
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        chip.classList.toggle('active');
+      });
+    });
+
+    // Star rating
+    document.querySelectorAll('.star').forEach((star, index) => {
+      star.addEventListener('click', () => {
+        document.querySelectorAll('.star').forEach((s, i) => {
+          if (i <= index) {
+            s.classList.add('active');
+          } else {
+            s.classList.remove('active');
+          }
+        });
+      });
+    });
+
+    // Project card interactions
+    document.querySelectorAll('.action-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const action = btn.textContent.includes('View') ? 'viewing' : 'downloading';
+        console.log(`${action} project...`);
+        // Add your API calls here
+      });
+    });
+  </script>
+</body>
+</html>

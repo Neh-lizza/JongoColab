@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supervisor Dashboard - JongoHub</title>
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/student_db.css">
+  <link rel="stylesheet" href="css/supervisor_db.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <div class="dashboard-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fas fa-chalkboard-teacher"></i>
+        <span>Supervisor Panel</span>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link active" data-page="overview">
+            <i class="fas fa-chart-line"></i>
+            <span>Overview</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-page="students">
+            <i class="fas fa-user-graduate"></i>
+            <span>Students</span>
+            <span class="badge-count">24</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-page="tasks">
+            <i class="fas fa-tasks"></i>
+            <span>Task Management</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-page="notifications">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-page="projects">
+            <i class="fas fa-folder"></i>
+            <span>Projects Review</span>
+            <span class="badge-count pending">5</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-page="analytics">
+            <i class="fas fa-chart-pie"></i>
+            <span>Analytics</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-page="reports">
+            <i class="fas fa-file-alt"></i>
+            <span>Reports</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="supervisor-info-card">
+        <i class="fas fa-shield-alt"></i>
+        <h3>Supervisor Access</h3>
+        <p>You have full control over student activities and project reviews</p>
+      </div>
+
+      <ul class="nav-menu nav-bottom">
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-page="settings">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Log Out</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      
+      <!-- Header -->
+      <div class="dashboard-header">
+        <div class="header-left">
+          <button class="mobile-menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div>
+            <h1>Supervisor Dashboard</h1>
+            <p class="header-subtitle">Manage students, tasks, and notifications</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search students, tasks...">
+          </div>
+          <button class="icon-btn notification-btn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-dot"></span>
+          </button>
+          <div class="user-profile">
+            <div class="user-avatar supervisor">
+              <img src="https://via.placeholder.com/45/CC00FF/FFFFFF?text=SV" alt="Supervisor">
+            </div>
+            <div class="user-info">
+              <span class="user-name">Dr. Smith</span>
+              <span class="user-institution">Supervisor</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <button class="quick-action-btn purple" onclick="openTaskModal()">
+          <i class="fas fa-plus-circle"></i>
+          <span>Create Task</span>
+        </button>
+        <button class="quick-action-btn green" onclick="openNotificationModal()">
+          <i class="fas fa-megaphone"></i>
+          <span>Post Notification</span>
+        </button>
+        <button class="quick-action-btn cyan" onclick="openReviewModal()">
+          <i class="fas fa-check-circle"></i>
+          <span>Review Projects</span>
+        </button>
+        <button class="quick-action-btn orange">
+          <i class="fas fa-download"></i>
+          <span>Export Report</span>
+        </button>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card primary">
+          <div class="stat-header">
+            <span class="stat-title">Total Students</span>
+            <i class="fas fa-user-graduate stat-icon"></i>
+          </div>
+          <div class="stat-value">24</div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>+3 this month</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Active Tasks</span>
+            <i class="fas fa-tasks stat-icon"></i>
+          </div>
+          <div class="stat-value">12</div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>8 pending review</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Projects Submitted</span>
+            <i class="fas fa-folder-open stat-icon"></i>
+          </div>
+          <div class="stat-value">48</div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>+15 this week</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Avg Completion Rate</span>
+            <i class="fas fa-chart-line stat-icon"></i>
+          </div>
+          <div class="stat-value">87%</div>
+          <div class="stat-change positive">
+            <i class="fas fa-arrow-up"></i>
+            <span>+5% improvement</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Content -->
+      <div class="dashboard-grid">
+        
+        <!-- Active Tasks Section -->
+        <div class="dashboard-section tasks-section">
+          <div class="section-card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Active Tasks</h3>
+                <p class="card-subtitle">Monitor ongoing assignments</p>
+              </div>
+              <button class="btn-add" onclick="openTaskModal()">
+                <i class="fas fa-plus"></i>
+                <span>New Task</span>
+              </button>
+            </div>
+
+            <div class="tasks-list">
+              <!-- Task Item 1 -->
+              <div class="task-item">
+                <div class="task-status-indicator active"></div>
+                <div class="task-content">
+                  <div class="task-header">
+                    <h4>Build E-Commerce Website</h4>
+                    <div class="task-meta">
+                      <span class="task-category purple">
+                        <i class="fas fa-code"></i>
+                        Web Development
+                      </span>
+                    </div>
+                  </div>
+                  <p class="task-description">Create a fully functional e-commerce platform with shopping cart and payment integration</p>
+                  <div class="task-footer">
+                    <div class="task-assignees">
+                      <span class="label">Assigned to:</span>
+                      <div class="assignees-avatars">
+                        <img src="https://via.placeholder.com/28/00FF88/FFFFFF?text=A" alt="Student">
+                        <img src="https://via.placeholder.com/28/00FFFF/000000?text=B" alt="Student">
+                        <img src="https://via.placeholder.com/28/FF00FF/FFFFFF?text=C" alt="Student">
+                        <span class="more-assignees">+5</span>
+                      </div>
+                    </div>
+                    <div class="task-deadline">
+                      <i class="fas fa-clock"></i>
+                      <span>Due: Nov 30, 2024</span>
+                      <span class="deadline-badge active">5 days left</span>
+                    </div>
+                  </div>
+                  <div class="task-progress">
+                    <div class="progress-info">
+                      <span>Progress: 65%</span>
+                      <span>5/8 completed</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 65%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-actions">
+                  <button class="action-icon-btn" title="Edit">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="action-icon-btn" title="View Details">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="action-icon-btn danger" title="Delete">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Task Item 2 -->
+              <div class="task-item">
+                <div class="task-status-indicator warning"></div>
+                <div class="task-content">
+                  <div class="task-header">
+                    <h4>Mobile App UI/UX Design</h4>
+                    <div class="task-meta">
+                      <span class="task-category green">
+                        <i class="fas fa-mobile-alt"></i>
+                        Design
+                      </span>
+                    </div>
+                  </div>
+                  <p class="task-description">Design complete UI/UX for fitness tracking mobile application using Figma</p>
+                  <div class="task-footer">
+                    <div class="task-assignees">
+                      <span class="label">Assigned to:</span>
+                      <div class="assignees-avatars">
+                        <img src="https://via.placeholder.com/28/CC00FF/FFFFFF?text=D" alt="Student">
+                        <img src="https://via.placeholder.com/28/FFB800/000000?text=E" alt="Student">
+                      </div>
+                    </div>
+                    <div class="task-deadline">
+                      <i class="fas fa-clock"></i>
+                      <span>Due: Nov 25, 2024</span>
+                      <span class="deadline-badge warning">2 days left</span>
+                    </div>
+                  </div>
+                  <div class="task-progress">
+                    <div class="progress-info">
+                      <span>Progress: 40%</span>
+                      <span>2/5 screens done</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill warning" style="width: 40%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-actions">
+                  <button class="action-icon-btn">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="action-icon-btn">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="action-icon-btn danger">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Task Item 3 -->
+              <div class="task-item">
+                <div class="task-status-indicator success"></div>
+                <div class="task-content">
+                  <div class="task-header">
+                    <h4>Data Analysis Project</h4>
+                    <div class="task-meta">
+                      <span class="task-category cyan">
+                        <i class="fas fa-chart-bar"></i>
+                        Data Science
+                      </span>
+                    </div>
+                  </div>
+                  <p class="task-description">Analyze student performance data and create visualization dashboard</p>
+                  <div class="task-footer">
+                    <div class="task-assignees">
+                      <span class="label">Assigned to:</span>
+                      <div class="assignees-avatars">
+                        <img src="https://via.placeholder.com/28/00FF88/FFFFFF?text=F" alt="Student">
+                        <span class="more-assignees">+3</span>
+                      </div>
+                    </div>
+                    <div class="task-deadline">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Completed: Nov 20, 2024</span>
+                      <span class="deadline-badge success">Done</span>
+                    </div>
+                  </div>
+                  <div class="task-progress">
+                    <div class="progress-info">
+                      <span>Progress: 100%</span>
+                      <span>4/4 completed</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill success" style="width: 100%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="task-actions">
+                  <button class="action-icon-btn">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="action-icon-btn success">
+                    <i class="fas fa-award"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notifications & Timeline Section -->
+        <div class="dashboard-section notifications-section">
+          <!-- Recent Notifications -->
+          <div class="section-card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Recent Notifications</h3>
+                <p class="card-subtitle">Posted announcements</p>
+              </div>
+              <button class="btn-add" onclick="openNotificationModal()">
+                <i class="fas fa-plus"></i>
+                <span>Post</span>
+              </button>
+            </div>
+
+            <div class="notifications-list">
+              <div class="notification-item purple">
+                <div class="notification-icon">
+                  <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="notification-content">
+                  <h4>Important: Deadline Extension</h4>
+                  <p>Web development project deadline has been extended to December 5th</p>
+                  <div class="notification-meta">
+                    <span><i class="fas fa-clock"></i> 2 hours ago</span>
+                    <span><i class="fas fa-users"></i> Sent to: All Students</span>
+                  </div>
+                </div>
+                <div class="notification-actions">
+                  <button class="action-icon-btn">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="action-icon-btn danger">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="notification-item green">
+                <div class="notification-icon">
+                  <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="notification-content">
+                  <h4>Workshop Reminder</h4>
+                  <p>Don't forget about the AI/ML workshop tomorrow at 10 AM in Lab 3</p>
+                  <div class="notification-meta">
+                    <span><i class="fas fa-clock"></i> 5 hours ago</span>
+                    <span><i class="fas fa-users"></i> Sent to: CUIB Students</span>
+                  </div>
+                </div>
+                <div class="notification-actions">
+                  <button class="action-icon-btn">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="action-icon-btn danger">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="notification-item cyan">
+                <div class="notification-icon">
+                  <i class="fas fa-trophy"></i>
+                </div>
+                <div class="notification-content">
+                  <h4>Project Showcase Event</h4>
+                  <p>Submit your best projects for the end-of-semester showcase on December 15th</p>
+                  <div class="notification-meta">
+                    <span><i class="fas fa-clock"></i> 1 day ago</span>
+                    <span><i class="fas fa-users"></i> Sent to: All Institutions</span>
+                  </div>
+                </div>
+                <div class="notification-actions">
+                  <button class="action-icon-btn">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="action-icon-btn danger">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Task Deadline Timeline -->
+          <div class="section-card timeline-card">
+            <div class="card-header">
+              <h3 class="card-title">Upcoming Deadlines</h3>
+            </div>
+
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-marker warning"></div>
+                <div class="timeline-content">
+                  <h4>Mobile App Design</h4>
+                  <p>Nov 25, 2024 - 2 days left</p>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-marker active"></div>
+                <div class="timeline-content">
+                  <h4>E-Commerce Website</h4>
+                  <p>Nov 30, 2024 - 7 days left</p>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-marker active"></div>
+                <div class="timeline-content">
+                  <h4>AI Chatbot Project</h4>
+                  <p>Dec 5, 2024 - 12 days left</p>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-marker success"></div>
+                <div class="timeline-content">
+                  <h4>Data Analysis</h4>
+                  <p>Completed ✓</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Create Task Modal -->
+  <div class="modal" id="taskModal">
+    <div class="modal-overlay" onclick="closeTaskModal()"></div>
+    <div class="modal-content large">
+      <div class="modal-header">
+        <h2><i class="fas fa-tasks"></i> Create New Task</h2>
+        <button class="modal-close" onclick="closeTaskModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form class="modal-body" id="taskForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Task Title *</label>
+            <input type="text" class="form-input" placeholder="Enter task title" required>
+          </div>
+          <div class="form-group">
+            <label>Category *</label>
+            <select class="form-input" required>
+              <option value="">Select category</option>
+              <option value="web">Web Development</option>
+              <option value="mobile">Mobile Development</option>
+              <option value="design">Design</option>
+              <option value="ai">AI/ML</option>
+              <option value="data">Data Science</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description *</label>
+          <textarea class="form-input" rows="4" placeholder="Describe the task..." required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Assign To *</label>
+            <select class="form-input" multiple required>
+              <option value="all">All Students</option>
+              <option value="cuib">CUIB Students</option>
+              <option value="ub">UB Students</option>
+              <option value="landmark">Landmark Students</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Deadline *</label>
+            <input type="date" class="form-input" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Priority</label>
+          <div class="priority-options">
+            <label class="priority-option">
+              <input type="radio" name="priority" value="low" checked>
+              <span class="priority-badge low">Low</span>
+            </label>
+            <label class="priority-option">
+              <input type="radio" name="priority" value="medium">
+              <span class="priority-badge medium">Medium</span>
+            </label>
+            <label class="priority-option">
+              <input type="radio" name="priority" value="high">
+              <span class="priority-badge high">High</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeTaskModal()">Cancel</button>
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-check"></i>
+            Create Task
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Post Notification Modal -->
+  <div class="modal" id="notificationModal">
+    <div class="modal-overlay" onclick="closeNotificationModal()"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-megaphone"></i> Post Notification</h2>
+        <button class="modal-close" onclick="closeNotificationModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form class="modal-body" id="notificationForm">
+        <div class="form-group">
+          <label>Title *</label>
+          <input type="text" class="form-input" placeholder="Notification title" required>
+        </div>
+
+        <div class="form-group">
+          <label>Message *</label>
+          <textarea class="form-input" rows="5" placeholder="Write your message..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Send To *</label>
+          <select class="form-input" required>
+            <option value="">Select recipients</option>
+            <option value="all">All Students</option>
+            <option value="cuib">CUIB Students</option>
+            <option value="ub">UB Students</option>
+            <option value="landmark">Landmark Students</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Type</label>
+          <div class="notification-type-options">
+            <label class="type-option">
+              <input type="radio" name="type" value="info" checked>
+              <span class="type-badge info"><i class="fas fa-info-circle"></i> Info</span>
+            </label>
+            <label class="type-option">
+              <input type="radio" name="type" value="warning">
+              <span class="type-badge warning"><i class="fas fa-exclamation-triangle"></i> Warning</span>
+            </label>
+            <label class="type-option">
+              <input type="radio" name="type" value="success">
+              <span class="type-badge success"><i class="fas fa-check-circle"></i> Success</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeNotificationModal()">Cancel</button>
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-paper-plane"></i>
+            Post Notification
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/student_db.js"></script>
+  <script src="js/supervisor.js"></script>
+</body>
+</html>
