@@ -216,41 +216,60 @@
       font-weight: 600;
       color: var(--color-text-secondary);
     }
+/* Post Media */
+.post-media {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-info) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 48px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
 
-    /* Post Media */
-    .post-media {
-      width: 100%;
-      height: 200px;
-      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-info) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 48px;
-      border-radius: 12px;
-      margin-bottom: 16px;
-      position: relative;
-      overflow: hidden;
-    }
+.post-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
-    .post-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+/* Fallback icon container styling */
+.post-media > div {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-info) 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
-    .media-type-badge {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      padding: 6px 12px;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(10px);
-      border-radius: 8px;
-      color: white;
-      font-size: 12px;
-      font-weight: 600;
-    }
+/* Icon styling when no image */
+.post-media > i {
+  position: relative;
+  z-index: 1;
+}
+
+.media-type-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 10;
+}
 
     /* Post Actions */
     .post-actions {
@@ -791,6 +810,68 @@
   </div>
 </div>
 
+<!-- Create Post Modal -->
+<div class="modal" id="postModal">
+  <!-- ... existing post modal code ... -->
+</div>
+
+<!-- ==================== ADD THIS COLLABORATION MODAL HERE ==================== -->
+<!-- Collaboration Request Modal -->
+<div class="modal" id="collaborationModal">
+  <div class="modal-content" style="max-width: 500px;">
+    <div class="modal-header">
+      <h2 class="modal-title">Request Collaboration</h2>
+      <button class="close-modal" onclick="closeCollaborationModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <i class="fas fa-handshake" style="font-size: 48px; color: var(--color-success);"></i>
+          <div>
+            <h3 id="collab-project-title" style="margin: 0; color: var(--color-text-primary); font-size: 18px;"></h3>
+            <p id="collab-project-author" style="margin: 4px 0 0 0; color: var(--color-text-secondary); font-size: 14px;"></p>
+          </div>
+        </div>
+        <p style="color: var(--color-text-secondary); line-height: 1.6;">
+          Would you like to collaborate on this project? Tell the project owner why you're interested and what you can bring to the team.
+        </p>
+      </div>
+
+      <form id="collaborationForm" onsubmit="handleCollaborationSubmit(event)">
+        <div class="form-group">
+          <label>Why do you want to collaborate? *</label>
+          <textarea 
+            id="collaborationMessage" 
+            placeholder="Share your skills, experience, or ideas for this project..." 
+            required
+            style="min-height: 120px;"
+          ></textarea>
+          <p style="font-size: 12px; color: var(--color-text-muted); margin-top: 8px;">
+            <i class="fas fa-lightbulb"></i> Tip: Mention your relevant skills or what value you can add to the project
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+          <button 
+            type="button" 
+            onclick="closeCollaborationModal()" 
+            style="flex: 1; padding: 12px; background: var(--color-bg-secondary); color: var(--color-text-primary); border: 2px solid var(--color-border); border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="submit-post-btn" 
+            style="flex: 1; margin: 0;"
+          >
+            <i class="fas fa-paper-plane"></i> Send Request
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- ==================== END OF COLLABORATION MODAL ==================== -->
 
   
   <!-- Scripts -->
@@ -986,7 +1067,7 @@ const initDragAndDrop = () => {
   });
 };
 
-// Create post card HTML - FIXED ID comparison
+// Create post card HTML - FIXED ID comparison and IMAGE DISPLAY
 const createPostCard = (post) => {
   const isLiked = userLikes.has(post._id);
   const authorInitials = getInitials(post.authorName);
@@ -1005,6 +1086,18 @@ const createPostCard = (post) => {
   // FIXED: Compare as strings, handle both _id and id
   const currentUserId = currentUser.id || currentUser._id;
   const isOwner = String(postAuthorId) === String(currentUserId);
+  
+  // FIXED: Check if post has valid images
+  const hasValidImage = post.images && post.images.length > 0 && post.images[0];
+  
+  // Log for debugging
+  console.log('Post card data:', {
+    title: post.title,
+    hasImages: !!post.images,
+    imageCount: post.images?.length || 0,
+    hasValidImage: hasValidImage,
+    imagePrefix: hasValidImage ? post.images[0].substring(0, 30) + '...' : 'none'
+  });
   
   return `
     <div class="post-card" data-category="${post.category}" data-id="${post._id}">
@@ -1039,12 +1132,30 @@ const createPostCard = (post) => {
           </div>
         ` : ''}
 
+        <!-- IMAGE DISPLAY SECTION - PRIORITY TO UPLOADED IMAGES -->
         <div class="post-media">
-          ${post.images && post.images.length > 0 
-            ? `<img src="${post.images[0]}" alt="${post.title}" style="width: 100%; height: 100%; object-fit: cover;">` 
-            : `<i class="fas ${getCategoryIcon(post.category)}"></i>`
+          ${hasValidImage 
+            ? `
+              <!-- Display uploaded image -->
+              <img 
+                src="${post.images[0]}" 
+                alt="${post.title}" 
+                style="width: 100%; height: 100%; object-fit: cover;"
+                onerror="console.error('Image load failed'); this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                onload="console.log('Image loaded successfully');"
+              >
+              <!-- Fallback icon if image fails to load -->
+              <div style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">
+                <i class="fas ${getCategoryIcon(post.category)}" style="font-size: 48px; color: white;"></i>
+              </div>
+              ${post.link ? `<span class="media-type-badge">${post.link.includes('github') ? 'GitHub' : 'Link'}</span>` : ''}
+            ` 
+            : `
+              <!-- No image uploaded - show category icon -->
+              <i class="fas ${getCategoryIcon(post.category)}" style="font-size: 48px; color: white;"></i>
+              ${post.link ? `<span class="media-type-badge">${post.link.includes('github') ? 'GitHub' : 'Link'}</span>` : ''}
+            `
           }
-          ${post.link ? `<span class="media-type-badge">${post.link.includes('github') ? 'GitHub' : 'Link'}</span>` : ''}
         </div>
 
         <div class="post-stats">
@@ -1068,7 +1179,6 @@ const createPostCard = (post) => {
     </div>
   `;
 };
-
 // Load posts from API
 const loadPosts = async () => {
   try {
@@ -1170,24 +1280,83 @@ const commentPost = (postId) => {
   }
 };
 
-// Collaborate on post
-const collaboratePost = (postId) => {
-  const message = prompt('Why would you like to collaborate?');
-  if (message) {
-    apiRequest(`/posts/${postId}/collaborate`, {
-      method: 'POST',
-      body: JSON.stringify({ message })
-    })
-    .then(() => {
-      showToast('Collaboration request sent!');
-    })
-    .catch(error => {
-      console.error('Error sending collaboration request:', error);
-      showToast('Failed to send collaboration request. Please try again.', 'error');
-    });
+// Store current collaboration post ID
+let currentCollaborationPostId = null;
+
+// Open collaboration modal
+const collaboratePost = async (postId) => {
+  try {
+    // Get post details
+    const response = await apiRequest(`/posts/${postId}`);
+    const post = response.data;
+    
+    // Store post ID
+    currentCollaborationPostId = postId;
+    
+    // Fill modal with post details
+    document.getElementById('collab-project-title').textContent = post.title;
+    document.getElementById('collab-project-author').textContent = `by ${post.authorName}`;
+    
+    // Clear previous message
+    document.getElementById('collaborationMessage').value = '';
+    
+    // Open modal
+    document.getElementById('collaborationModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+  } catch (error) {
+    console.error('Error loading post details:', error);
+    showToast('Failed to load project details', 'error');
   }
 };
 
+// Close collaboration modal
+const closeCollaborationModal = () => {
+  document.getElementById('collaborationModal').classList.remove('active');
+  document.body.style.overflow = '';
+  document.getElementById('collaborationForm').reset();
+  currentCollaborationPostId = null;
+};
+
+// Handle collaboration form submission
+const handleCollaborationSubmit = async (e) => {
+  e.preventDefault();
+  
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  const originalText = submitBtn.innerHTML;
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+  
+  try {
+    const message = document.getElementById('collaborationMessage').value;
+    
+    const response = await apiRequest(`/posts/${currentCollaborationPostId}/collaborate`, {
+      method: 'POST',
+      body: JSON.stringify({ message })
+    });
+    
+    showToast('Collaboration request sent successfully! 🎉');
+    closeCollaborationModal();
+    
+    // Show success message
+    setTimeout(() => {
+      showToast('The project owner will be notified and can accept or decline your request', 'success');
+    }, 1000);
+    
+  } catch (error) {
+    console.error('Error sending collaboration request:', error);
+    
+    // Handle specific errors
+    if (error.message.includes('already sent')) {
+      showToast('You have already sent a collaboration request for this project', 'error');
+    } else {
+      showToast(error.message || 'Failed to send collaboration request', 'error');
+    }
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalText;
+  }
+};
 // Modal functions
 const openPostModal = () => {
   document.getElementById('postModal').classList.add('active');
@@ -1380,7 +1549,29 @@ const deletePost = async (postId) => {
 // Initialize page
 window.addEventListener('DOMContentLoaded', () => {
   loadPosts();
-  initDragAndDrop(); // Initialize drag and drop functionality
+  initDragAndDrop();
+  
+  // Add collaboration modal event listeners
+  const collabModal = document.getElementById('collaborationModal');
+  if (collabModal) {
+    collabModal.addEventListener('click', (e) => {
+      if (e.target.id === 'collaborationModal') {
+        closeCollaborationModal();
+      }
+    });
+  }
+});
+
+// Update Escape key handler
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('postModal')?.classList.contains('active')) {
+      closePostModal();
+    }
+    if (document.getElementById('collaborationModal')?.classList.contains('active')) {
+      closeCollaborationModal();
+    }
+  }
 });
   </script>
 </body>

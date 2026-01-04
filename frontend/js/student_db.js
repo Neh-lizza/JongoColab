@@ -166,10 +166,148 @@ viewBtns.forEach(btn => {
   });
 });
 
-// Notification Button
-document.querySelector('.notification-btn')?.addEventListener('click', () => {
-  alert('Notifications panel opening...');
-  // Open notifications dropdown
+// Notification functions
+let collaborationRequests = [];
+
+async function loadCollaborationRequests() {
+  try {
+    const token = localStorage.getItem('authToken');
+    const response = await fetch(window.location.origin + '/api/collaborations/requests', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      collaborationRequests = data.data;
+      updateNotificationBadge();
+      renderNotifications();
+    }
+  } catch (error) {
+    console.error('Error loading requests:', error);
+  }
+}
+
+function updateNotificationBadge() {
+  const pendingCount = collaborationRequests.filter(r => r.status === 'pending').length;
+  const dot = document.getElementById('notificationDot');
+  
+  if (pendingCount > 0) {
+    dot.style.display = 'block';
+  } else {
+    dot.style.display = 'none';
+  }
+}
+
+function toggleNotifications() {
+  const dropdown = document.getElementById('notificationDropdown');
+  dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+  
+  if (dropdown.style.display === 'block') {
+    loadCollaborationRequests();
+  }
+}
+
+function closeNotifications() {
+  document.getElementById('notificationDropdown').style.display = 'none';
+}
+
+function renderNotifications() {
+  const list = document.getElementById('notificationList');
+  
+  if (collaborationRequests.length === 0) {
+    list.innerHTML = '<p style="text-align: center; padding: 40px; color: var(--color-text-muted);">No collaboration requests</p>';
+    return;
+  }
+  
+  list.innerHTML = collaborationRequests.map(req => `
+    <div class="notification-item">
+      <div class="notification-item-header">
+        <span class="notification-title">${req.userName}</span>
+        <span class="notification-time">${timeAgo(req.createdAt)}</span>
+      </div>
+      <p style="font-size: 12px; color: var(--color-accent); margin-bottom: 8px;">Project: ${req.postTitle}</p>
+      <p class="notification-message">${req.message}</p>
+      ${req.status === 'pending' ? `
+        <div class="notification-actions">
+          <button class="btn-accept" onclick="handleCollabRequest('${req.postId}', '${req._id}', 'accepted')">
+            <i class="fas fa-check"></i> Accept
+          </button>
+          <button class="btn-decline" onclick="handleCollabRequest('${req.postId}', '${req._id}', 'rejected')">
+            <i class="fas fa-times"></i> Decline
+          </button>
+        </div>
+      ` : `
+        <p style="font-size: 12px; color: ${req.status === 'accepted' ? 'var(--color-success)' : 'var(--color-error)'}; font-weight: 600;">
+          ${req.status === 'accepted' ? '✓ Accepted' : '✗ Declined'}
+        </p>
+      `}
+    </div>
+  `).join('');
+}
+
+async function handleCollabRequest(postId, requestId, status) {
+  try {
+    const token = localStorage.getItem('authToken');
+    const response = await fetch(`${window.location.origin}/api/collaborations/${postId}/${requestId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ status })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      showAlert(`Request ${status}!`, 'success');
+      loadCollaborationRequests();
+    }
+  } catch (error) {
+    console.error('Error handling request:', error);
+    showAlert('Failed to update request', 'error');
+  }
+}
+
+function timeAgo(date) {
+  const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    week: 604800,
+    day: 86400,
+    hour: 3600,
+    minute: 60
+  };
+  
+  for (const [unit, secondsInUnit] of Object.entries(intervals)) {
+    const interval = Math.floor(seconds / secondsInUnit);
+    if (interval >= 1) {
+      return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+    }
+  }
+  
+  return 'Just now';
+}
+
+// Load notifications on page load
+window.addEventListener('DOMContentLoaded', () => {
+  loadCollaborationRequests();
+  // Reload every 30 seconds
+  setInterval(loadCollaborationRequests, 30000);
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('notificationDropdown');
+  const btn = document.querySelector('.notification-btn');
+  
+  if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
+    closeNotifications();
+  }
 });
 
 // User Profile Click

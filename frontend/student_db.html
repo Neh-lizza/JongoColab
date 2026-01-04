@@ -110,10 +110,21 @@
             <i class="fas fa-search search-icon"></i>
             <input type="text" class="search-input" placeholder="Search projects, users...">
           </div>
-          <button class="icon-btn notification-btn">
-            <i class="fas fa-bell"></i>
-            <span class="notification-dot"></span>
-          </button>
+         <button class="icon-btn notification-btn" onclick="toggleNotifications()">
+  <i class="fas fa-bell"></i>
+  <span class="notification-dot" id="notificationDot" style="display: none;"></span>
+</button>
+
+<!-- Notification Dropdown -->
+<div class="notification-dropdown" id="notificationDropdown" style="display: none;">
+  <div class="notification-header">
+    <h3>Collaboration Requests</h3>
+    <button onclick="closeNotifications()" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+  </div>
+  <div class="notification-list" id="notificationList">
+    <p style="text-align: center; padding: 20px; color: var(--color-text-muted);">Loading...</p>
+  </div>
+</div>
           <div class="user-profile">
             <div class="user-avatar">
               <img src="https://via.placeholder.com/45/CC00FF/FFFFFF?text=ST" alt="Student">

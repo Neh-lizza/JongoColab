@@ -285,20 +285,102 @@ body {
   color: var(--color-accent);
 }
 
-.notification-btn {
-  position: relative;
+.notification-dropdown {
+  position: absolute;
+  top: 70px;
+  right: 80px;
+  width: 400px;
+  max-height: 500px;
+  background: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  z-index: 1000;
+  overflow: hidden;
 }
 
-.notification-dot {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 10px;
-  height: 10px;
+.notification-header {
+  padding: 16px 20px;
+  border-bottom: 2px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--color-text-primary);
+}
+
+.notification-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.2s;
+}
+
+.notification-item:hover {
+  background: var(--color-bg-secondary);
+}
+
+.notification-item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.notification-title {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.notification-time {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.notification-message {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.notification-actions button {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-accept {
+  background: var(--color-success);
+  color: white;
+}
+
+.btn-accept:hover {
+  background: #00cc70;
+}
+
+.btn-decline {
   background: var(--color-error);
-  border-radius: 50%;
-  border: 2px solid white;
-  animation: pulse 2s infinite;
+  color: white;
+}
+
+.btn-decline:hover {
+  background: #d63031;
 }
 
 @keyframes pulse {
