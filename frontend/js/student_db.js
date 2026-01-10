@@ -6,7 +6,7 @@
 const menuToggle = document.getElementById('menuToggle');
 const sidebar = document.querySelector('.sidebar');
 
-if (menuToggle) {
+if (menuToggle && sidebar) {
   menuToggle.addEventListener('click', () => {
     sidebar.classList.toggle('open');
   });
@@ -14,13 +14,15 @@ if (menuToggle) {
 
 // Close sidebar when clicking outside on mobile
 document.addEventListener('click', (e) => {
-  if (window.innerWidth <= 968) {
-    if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
-      sidebar.classList.remove('open');
+  const sidebarEl = document.querySelector('.sidebar');
+  const menuToggleEl = document.getElementById('menuToggle');
+  
+  if (sidebarEl && menuToggleEl && window.innerWidth <= 968) {
+    if (!sidebarEl.contains(e.target) && !menuToggleEl.contains(e.target)) {
+      sidebarEl.classList.remove('open');
     }
   }
 });
-
 // Navigation Active State
 const navLinks = document.querySelectorAll('.nav-link');
 
@@ -166,12 +168,21 @@ viewBtns.forEach(btn => {
   });
 });
 
-// Notification functions
+// ========================
+// FIXED NOTIFICATION FUNCTIONS FOR STUDENT_DB.JS
+// Replace the notification section in your student_db.js with this
+// ========================
+
 let collaborationRequests = [];
 
 async function loadCollaborationRequests() {
   try {
     const token = localStorage.getItem('authToken');
+    if (!token) {
+      console.log('No auth token found');
+      return;
+    }
+    
     const response = await fetch(window.location.origin + '/api/collaborations/requests', {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -191,8 +202,15 @@ async function loadCollaborationRequests() {
 }
 
 function updateNotificationBadge() {
-  const pendingCount = collaborationRequests.filter(r => r.status === 'pending').length;
   const dot = document.getElementById('notificationDot');
+  
+  // Check if element exists before trying to modify it
+  if (!dot) {
+    console.warn('Notification badge element not found');
+    return;
+  }
+  
+  const pendingCount = collaborationRequests.filter(r => r.status === 'pending').length;
   
   if (pendingCount > 0) {
     dot.style.display = 'block';
@@ -203,6 +221,12 @@ function updateNotificationBadge() {
 
 function toggleNotifications() {
   const dropdown = document.getElementById('notificationDropdown');
+  
+  if (!dropdown) {
+    console.warn('Notification dropdown element not found');
+    return;
+  }
+  
   dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
   
   if (dropdown.style.display === 'block') {
@@ -211,11 +235,19 @@ function toggleNotifications() {
 }
 
 function closeNotifications() {
-  document.getElementById('notificationDropdown').style.display = 'none';
+  const dropdown = document.getElementById('notificationDropdown');
+  if (dropdown) {
+    dropdown.style.display = 'none';
+  }
 }
 
 function renderNotifications() {
   const list = document.getElementById('notificationList');
+  
+  if (!list) {
+    console.warn('Notification list element not found');
+    return;
+  }
   
   if (collaborationRequests.length === 0) {
     list.innerHTML = '<p style="text-align: center; padding: 40px; color: var(--color-text-muted);">No collaboration requests</p>';
@@ -272,41 +304,47 @@ async function handleCollabRequest(postId, requestId, status) {
   }
 }
 
-function timeAgo(date) {
-  const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-  const intervals = {
-    year: 31536000,
-    month: 2592000,
-    week: 604800,
-    day: 86400,
-    hour: 3600,
-    minute: 60
-  };
+function showAlert(message, type) {
+  // Create a simple alert/toast
+  const alert = document.createElement('div');
+  alert.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background: ${type === 'success' ? 'var(--color-success)' : 'var(--color-error)'};
+    color: white;
+    border-radius: 8px;
+    z-index: 10000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  `;
+  alert.textContent = message;
+  document.body.appendChild(alert);
   
-  for (const [unit, secondsInUnit] of Object.entries(intervals)) {
-    const interval = Math.floor(seconds / secondsInUnit);
-    if (interval >= 1) {
-      return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
-    }
-  }
-  
-  return 'Just now';
+  setTimeout(() => {
+    alert.remove();
+  }, 3000);
 }
 
-// Load notifications on page load
+// Load notifications on page load - but only if elements exist
 window.addEventListener('DOMContentLoaded', () => {
-  loadCollaborationRequests();
-  // Reload every 30 seconds
-  setInterval(loadCollaborationRequests, 30000);
-});
-
-// Close dropdown when clicking outside
-document.addEventListener('click', (e) => {
-  const dropdown = document.getElementById('notificationDropdown');
-  const btn = document.querySelector('.notification-btn');
+  // Only initialize notifications if the required elements exist
+  const notificationBtn = document.querySelector('.notification-btn');
+  const notificationDropdown = document.getElementById('notificationDropdown');
   
-  if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
-    closeNotifications();
+  if (notificationBtn && notificationDropdown) {
+    loadCollaborationRequests();
+    // Reload every 30 seconds
+    setInterval(loadCollaborationRequests, 30000);
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!notificationDropdown.contains(e.target) && !notificationBtn.contains(e.target)) {
+        closeNotifications();
+      }
+    });
+  } else {
+    console.log('Notification elements not found on this page - skipping notification initialization');
   }
 });
 

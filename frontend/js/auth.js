@@ -1,59 +1,71 @@
 // ===================================
-// MERGED AUTH.JS - Complete Authentication
+// FIXED AUTH.JS - NO AUTO-LOGIN
 // File: frontend/js/auth.js
 // ===================================
 
 // ===================================
 // API CONFIGURATION
 // ===================================
-// Use relative URL since frontend is served from same port
 const API_BASE_URL = '/api';
 
 // ===================================
 // LOCAL STORAGE FUNCTIONS
 // ===================================
 
-// Store token in localStorage
 function setToken(token) {
     localStorage.setItem('authToken', token);
 }
 
-// Get token from localStorage
 function getToken() {
     return localStorage.getItem('authToken');
 }
 
-// Remove token from localStorage
 function removeToken() {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
 }
 
-// Store user data
 function setUserData(userData) {
     localStorage.setItem('userData', JSON.stringify(userData));
 }
 
-// Get user data
 function getUserData() {
     const data = localStorage.getItem('userData');
     return data ? JSON.parse(data) : null;
 }
 
-// Check if user is authenticated
 function isAuthenticated() {
     return !!getToken();
 }
 
-// Redirect to dashboard if authenticated
-function redirectIfAuthenticated() {
-    if (isAuthenticated()) {
-        window.location.href = 'student_db.html';
-    }
-}
+// ===================================
+// REMOVED: Auto-redirect if authenticated
+// Users must manually login each time
+// ===================================
 
-// Protect dashboard pages (redirect to login if not authenticated)
+// Protect dashboard pages
 function protectPage() {
     if (!isAuthenticated()) {
+        console.log('Not authenticated - redirecting to auth page');
+        window.location.href = 'auth.html';
+        return;
+    }
+    
+    // Validate token in background
+    validateCurrentSession();
+}
+
+// Validate current session
+async function validateCurrentSession() {
+    try {
+        const result = await getCurrentUser();
+        if (result.success) {
+            setUserData(result.data);
+        }
+    } catch (error) {
+        console.error('Session validation failed:', error);
+        // Clear invalid session
+        removeToken();
         window.location.href = 'auth.html';
     }
 }
@@ -62,7 +74,6 @@ function protectPage() {
 // API FUNCTIONS
 // ===================================
 
-// Register new user
 async function registerUser(userData) {
     try {
         const response = await fetch(`${API_BASE_URL}/auth/register`, {
@@ -86,7 +97,6 @@ async function registerUser(userData) {
     }
 }
 
-// Login user
 async function loginUser(credentials) {
     try {
         const response = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -110,7 +120,6 @@ async function loginUser(credentials) {
     }
 }
 
-// Get current user data
 async function getCurrentUser() {
     try {
         const token = getToken();
@@ -140,10 +149,9 @@ async function getCurrentUser() {
     }
 }
 
-// Logout user
 function logoutUser() {
+    console.log('Logging out user...');
     removeToken();
-    localStorage.removeItem('userData');
     window.location.href = 'auth.html';
 }
 
@@ -151,7 +159,6 @@ function logoutUser() {
 // UI FUNCTIONS
 // ===================================
 
-// Toggle between Login and Sign Up
 function toggleForm(formType) {
     const loginWrapper = document.getElementById('loginFormWrapper');
     const signupWrapper = document.getElementById('signupFormWrapper');
@@ -169,7 +176,6 @@ function toggleForm(formType) {
     }
 }
 
-// Toggle password visibility
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
     const button = input.nextElementSibling;
@@ -183,7 +189,6 @@ function togglePassword(inputId) {
     }
 }
 
-// Show alert - Updated to support multiple types
 function showAlert(type, message) {
     const alertContainer = document.getElementById('alertContainer');
     
@@ -192,7 +197,6 @@ function showAlert(type, message) {
         return;
     }
     
-    // Map old type names to new ones
     const typeMap = {
         'error': 'error',
         'success': 'success',
@@ -205,7 +209,6 @@ function showAlert(type, message) {
     const alert = document.createElement('div');
     alert.className = `alert alert-${alertType}`;
     
-    // Add icon based on type
     let icon = '';
     switch (alertType) {
         case 'success':
@@ -230,19 +233,16 @@ function showAlert(type, message) {
     
     alertContainer.appendChild(alert);
     
-    // Auto remove after 5 seconds
     setTimeout(() => {
         alert.style.animation = 'slideOutRight 0.3s ease';
         setTimeout(() => alert.remove(), 300);
     }, 5000);
 }
 
-// Forgot Password
 function showForgotPassword() {
     const email = prompt('Enter your email address:');
     
     if (email) {
-        // TODO: Integrate with backend password reset API
         setTimeout(() => {
             showAlert('success', `Password reset link sent to ${email}`);
         }, 500);
@@ -253,49 +253,42 @@ function showForgotPassword() {
 // FORM HANDLERS
 // ===================================
 
-// Login Form Submit - INTEGRATED WITH API
 async function handleLoginSubmit(e) {
     e.preventDefault();
     
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
     
-    // Basic validation
     if (!email || !password) {
         showAlert('error', 'Please fill in all fields');
         return;
     }
     
-    // Prepare credentials
-    const credentials = {
-        email,
-        password
-    };
+    const credentials = { email, password };
     
     try {
-        // Show loading state
         const button = e.target.querySelector('.btn-auth');
         const originalText = button.innerHTML;
         button.innerHTML = '<span>Signing in...</span>';
         button.disabled = true;
         
-        // Call API
         const result = await loginUser(credentials);
+        
+        console.log('Login successful:', result);
         
         // Store token and user data
         setToken(result.data.token);
         setUserData(result.data.user);
         
-        // Show success message
         showAlert('success', 'Login successful! Redirecting to dashboard...');
         
-        // Redirect to dashboard after 1 second
         setTimeout(() => {
             window.location.href = 'student_db.html';
         }, 1000);
         
     } catch (error) {
-        // Handle different error types
+        console.error('Login failed:', error);
+        
         if (error.message.includes('pending approval')) {
             showAlert('warning', 'Your account is pending admin approval. Please wait.');
         } else if (error.message.includes('rejected')) {
@@ -304,14 +297,12 @@ async function handleLoginSubmit(e) {
             showAlert('error', error.message || 'Invalid email or password');
         }
         
-        // Restore button
         const button = e.target.querySelector('.btn-auth');
         button.innerHTML = '<span>Sign in</span>';
         button.disabled = false;
     }
 }
 
-// Sign Up Form Submit - INTEGRATED WITH API
 async function handleSignupSubmit(e) {
     e.preventDefault();
     
@@ -345,7 +336,6 @@ async function handleSignupSubmit(e) {
         return;
     }
     
-    // Prepare user data
     const userData = {
         firstName,
         lastName,
@@ -356,45 +346,37 @@ async function handleSignupSubmit(e) {
     };
     
     try {
-        // Show loading state
         const button = e.target.querySelector('.btn-auth');
-        const originalText = button.innerHTML;
         button.innerHTML = '<span>Creating account...</span>';
         button.disabled = true;
         
-        // Call API
         const result = await registerUser(userData);
         
-        // Check if user was auto-approved
-        if (result.autoApproved && result.data.token) {
-            // User was auto-approved, store token and redirect
-            setToken(result.data.token);
-            setUserData(result.data.user);
-            
-            showAlert('success', 'Account created successfully! Redirecting to dashboard...');
-            
-            // Redirect to dashboard after 1 second
-            setTimeout(() => {
-                window.location.href = 'student_db.html';
-            }, 1000);
-            
+        console.log('Registration result:', result);
+        
+        // ===================================
+        // FIXED: Never auto-login after signup
+        // Always show success and switch to login
+        // ===================================
+        if (result.autoApproved) {
+            showAlert('success', 'Account created successfully! Please login to continue.');
         } else {
-            // User needs approval, show message and switch to login
-            showAlert('warning', result.message || 'Account created! Waiting for admin approval.');
-            
-            // Reset form
-            e.target.reset();
-            
-            // Switch to login form after 2 seconds
-            setTimeout(() => {
-                toggleForm('login');
-                document.getElementById('loginEmail').value = email;
-            }, 2000);
+            showAlert('warning', 'Account created! Waiting for admin approval.');
         }
         
+        // Clear the form
+        e.target.reset();
+        
+        // Switch to login form after 2 seconds
+        setTimeout(() => {
+            toggleForm('login');
+            document.getElementById('loginEmail').value = email;
+        }, 2000);
+        
     } catch (error) {
+        console.error('Registration failed:', error);
         showAlert('error', error.message || 'Registration failed. Please try again.');
-        // Restore button
+        
         const button = e.target.querySelector('.btn-auth');
         button.innerHTML = '<span>Create account</span>';
         button.disabled = false;
@@ -405,32 +387,24 @@ async function handleSignupSubmit(e) {
 // DASHBOARD FUNCTIONS
 // ===================================
 
-// Load user data on dashboard
 async function loadDashboardData() {
     try {
-        // Get user data from localStorage first
         const userData = getUserData();
 
         if (userData) {
-            // Update UI with cached data
             updateUserProfile(userData);
         }
 
-        // Fetch fresh data from API
         const result = await getCurrentUser();
         
         if (result.success) {
-            // Update localStorage with fresh data
             setUserData(result.data);
-            
-            // Update UI with fresh data
             updateUserProfile(result.data);
         }
 
     } catch (error) {
         console.error('Failed to load dashboard data:', error);
         
-        // If token is invalid, redirect to login
         if (error.message.includes('authorized') || error.message.includes('token')) {
             showAlert('error', 'Session expired. Please login again.');
             setTimeout(() => {
@@ -440,27 +414,22 @@ async function loadDashboardData() {
     }
 }
 
-// Update user profile in UI
 function updateUserProfile(userData) {
-    // Update user name
     const userNameElement = document.querySelector('.user-name');
     if (userNameElement) {
         userNameElement.textContent = `${userData.firstName} ${userData.lastName}`;
     }
 
-    // Update institution
     const userInstitutionElement = document.querySelector('.user-institution');
     if (userInstitutionElement) {
-        userInstitutionElement.textContent = userData.school || 'N/A';
+        userInstitutionElement.textContent = userData.school || userData.schoolName || 'N/A';
     }
 
-    // Update page title
     const dashboardTitle = document.querySelector('.dashboard-header h1');
     if (dashboardTitle) {
         dashboardTitle.textContent = `Welcome back, ${userData.firstName}!`;
     }
 
-    // Update user avatar with initials
     const userAvatar = document.querySelector('.user-avatar img');
     if (userAvatar) {
         const initials = `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase();
@@ -468,15 +437,14 @@ function updateUserProfile(userData) {
         userAvatar.alt = `${userData.firstName} ${userData.lastName}`;
     }
 
-    // Store school info for chat routing
     localStorage.setItem('userSchool', userData.school || userData.schoolName);
     localStorage.setItem('userDepartment', userData.department);
 }
-// Navigate to Community page
+
 function navigateToCommunity() {
-  window.location.href = 'community.html';
+    window.location.href = 'community.html';
 }
-// Navigate to school chat
+
 function navigateToSchoolChat() {
     const userData = getUserData();
     
@@ -486,7 +454,6 @@ function navigateToSchoolChat() {
         return;
     }
     
-    // Store school context for chat page
     localStorage.setItem('chatContext', JSON.stringify({
         school: userData.school || userData.schoolName,
         department: userData.department,
@@ -494,19 +461,17 @@ function navigateToSchoolChat() {
         userName: `${userData.firstName} ${userData.lastName}`
     }));
     
-    // Navigate to chat page
     window.location.href = 'chat.html';
 }
-// Navigate to My Projects
+
 function navigateToMyProjects() {
-  // Check if user is logged in
-  const token = localStorage.getItem('token');
-  if (!token) {
-    alert('Please login first');
-    window.location.href = 'auth.html';
-    return;
-  }
-  window.location.href = 'my_projects.html';
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        alert('Please login first');
+        window.location.href = 'auth.html';
+        return;
+    }
+    window.location.href = 'my_projects.html';
 }
 
 // ===================================
@@ -516,11 +481,13 @@ function navigateToMyProjects() {
 document.addEventListener('DOMContentLoaded', () => {
     const currentPage = window.location.pathname;
 
-    // If on auth.html, redirect if already authenticated
+    // ===================================
+    // FIXED: No auto-redirect on auth page
+    // Users always see login/signup forms
+    // ===================================
     if (currentPage.includes('auth.html') || currentPage.endsWith('/')) {
-        redirectIfAuthenticated();
+        console.log('On auth page - ready for manual login');
         
-        // Attach event listeners to forms
         const loginForm = document.getElementById('loginForm');
         if (loginForm) {
             loginForm.addEventListener('submit', handleLoginSubmit);
@@ -532,13 +499,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // If on student_db.html, protect the page and load data
+    // If on dashboard, protect and load data
     if (currentPage.includes('student_db.html') || currentPage.includes('dashboard.html')) {
         protectPage();
         loadDashboardData();
     }
 
-    // Check URL parameters for form type
+    // Check URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const formType = urlParams.get('type');
 
@@ -553,9 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ===================================
-// SOCIAL LOGIN HANDLERS (Future)
-// ===================================
+// Social login handlers
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.btn-social')?.forEach(button => {
         button.addEventListener('click', (e) => {
@@ -566,9 +531,22 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ===================================
-// EXPORT FUNCTIONS FOR HTML ONCLICK
+// LOGOUT FUNCTION FOR NAV LINKS
+// ===================================
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        logoutUser();
+    }
+}
+
+// ===================================
+// EXPORT FUNCTIONS FOR HTML
 // ===================================
 window.toggleForm = toggleForm;
 window.togglePassword = togglePassword;
 window.showForgotPassword = showForgotPassword;
 window.logoutUser = logoutUser;
+window.logout = logout;
+window.navigateToCommunity = navigateToCommunity;
+window.navigateToSchoolChat = navigateToSchoolChat;
+window.navigateToMyProjects = navigateToMyProjects;

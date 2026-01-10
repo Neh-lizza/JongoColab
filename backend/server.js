@@ -55,7 +55,7 @@ app.use('/images', express.static(path.join(__dirname, '../frontend/images')));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/posts', require('./routes/posts')); // Add posts routes
-app.use('/api/collaborations', collaborationsRoutes);
+app.use('/api/collaborations', require('./routes/collaborations')); 
 
 // Health check route
 app.get('/api/health', (req, res) => {
