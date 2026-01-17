@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collaborations - JongoCollab</title>
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/student_db.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Collaborations Page Styles */
+    .collab-header {
+      background: var(--color-bg-card);
+      padding: 32px;
+      border-radius: 16px;
+      border: 2px solid var(--color-border);
+      margin-bottom: 24px;
+    }
+
+    .collab-title {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-success) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .collab-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .collab-stat-card {
+      background: var(--color-bg-card);
+      padding: 20px;
+      border-radius: 12px;
+      border: 2px solid var(--color-border);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .collab-stat-card:hover {
+      border-color: var(--color-accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--color-accent);
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      font-weight: 600;
+    }
+
+    .tabs-container {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--color-border);
+      padding-bottom: 0;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      bottom: -2px;
+    }
+
+    .tab-btn:hover {
+      color: var(--color-accent);
+    }
+
+    .tab-btn.active {
+      color: var(--color-accent);
+      border-bottom-color: var(--color-accent);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .collab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .collab-card {
+      background: var(--color-bg-card);
+      border: 2px solid var(--color-border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .collab-card:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-md), var(--shadow-neon-purple);
+      transform: translateY(-4px);
+    }
+
+    .collab-card-header {
+      padding: 20px;
+      background: var(--color-bg-secondary);
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .collab-project-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .project-status {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-active {
+      background: var(--color-success-light);
+      color: var(--color-success);
+    }
+
+    .status-pending {
+      background: rgba(255, 184, 0, 0.1);
+      color: #FFB800;
+    }
+
+    .status-accepted {
+      background: var(--color-success-light);
+      color: var(--color-success);
+    }
+
+    .status-rejected {
+      background: rgba(231, 76, 60, 0.1);
+      color: var(--color-error);
+    }
+
+    .collab-card-body {
+      padding: 20px;
+    }
+
+    .collaborator-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .collaborator-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-info) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .collaborator-details {
+      flex: 1;
+    }
+
+    .collaborator-name {
+      font-weight: 700;
+      color: var(--color-text-primary);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .collaborator-school {
+      font-size: 13px;
+      color: var(--color-text-muted);
+    }
+
+    .collab-message {
+      background: var(--color-bg-secondary);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      border-left: 3px solid var(--color-accent);
+    }
+
+    .collab-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-bottom: 16px;
+    }
+
+    .collab-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .collab-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .collab-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-view-project {
+      background: var(--color-accent);
+      color: white;
+      box-shadow: var(--shadow-neon-purple);
+    }
+
+    .btn-view-project:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(204, 0, 255, 0.5);
+    }
+
+    .btn-message {
+      background: var(--color-info);
+      color: white;
+    }
+
+    .btn-message:hover {
+      background: #0099CC;
+      transform: translateY(-2px);
+    }
+
+    .btn-end-collab {
+      background: var(--color-error);
+      color: white;
+    }
+
+    .btn-end-collab:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--color-text-muted);
+    }
+
+    .empty-state i {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    .empty-state h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: var(--color-text-primary);
+    }
+
+    .loading-spinner {
+      text-align: center;
+      padding: 40px;
+      color: var(--color-text-muted);
+    }
+
+    .loading-spinner i {
+      font-size: 48px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>JongoColab</span>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="student_db.html" class="nav-link">
+            <i class="fas fa-chart-line"></i>
+            <span>Overview</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="navigateToMyProjects(); return false;">
+            <i class="fas fa-folder"></i>
+            <span>My Projects</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="community.html" class="nav-link">
+            <i class="fas fa-users"></i>
+            <span>Community</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="navigateToSchoolChat(); return false;">
+            <i class="fas fa-comments"></i>
+            <span>School Chat</span>
+            <span class="badge-count">3</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="navigateToCollaborations(); return false;">
+            <i class="fas fa-handshake"></i>
+            <span>Collaborations</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-chart-pie"></i>
+            <span>Analytics</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="explore.html" class="nav-link">
+            <i class="fas fa-book"></i>
+            <span>Resources</span>
+          </a>
+        </li>
+      </ul>
+
+      
+
+      <ul class="nav-menu nav-bottom">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-question-circle"></i>
+            <span>Help Center</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="logout(); return false;">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Log Out</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      
+      <!-- Header -->
+      <div class="collab-header">
+        <h1 class="collab-title">My Collaborations</h1>
+        <p style="color: var(--color-text-secondary); font-size: 16px;">
+          Manage your active collaborations and track collaboration requests
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="collab-stats">
+        <div class="collab-stat-card">
+          <div class="stat-number" id="activeCollabsCount">0</div>
+          <div class="stat-label">Active Collaborations</div>
+        </div>
+        <div class="collab-stat-card">
+          <div class="stat-number" id="pendingRequestsCount">0</div>
+          <div class="stat-label">Pending Requests</div>
+        </div>
+        <div class="collab-stat-card">
+          <div class="stat-number" id="sentRequestsCount">0</div>
+          <div class="stat-label">Sent Requests</div>
+        </div>
+        <div class="collab-stat-card">
+          <div class="stat-number" id="totalCollabsCount">0</div>
+          <div class="stat-label">Total Collaborations</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-container">
+        <button class="tab-btn active" data-tab="active">
+          <i class="fas fa-handshake"></i> Active Collaborations
+        </button>
+        <button class="tab-btn" data-tab="pending">
+          <i class="fas fa-clock"></i> Pending Requests
+        </button>
+        <button class="tab-btn" data-tab="sent">
+          <i class="fas fa-paper-plane"></i> Sent Requests
+        </button>
+        <button class="tab-btn" data-tab="history">
+          <i class="fas fa-history"></i> History
+        </button>
+      </div>
+
+      <!-- Tab Contents -->
+      <div class="tab-content active" id="activeTab">
+        <div class="collab-grid" id="activeCollabsGrid">
+          <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading active collaborations...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="pendingTab">
+        <div class="collab-grid" id="pendingRequestsGrid">
+          <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading pending requests...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="sentTab">
+        <div class="collab-grid" id="sentRequestsGrid">
+          <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading sent requests...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="historyTab">
+        <div class="collab-grid" id="historyGrid">
+          <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading collaboration history...</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/student_db.js"></script>
+  <script>
+    // ===================================
+    // COLLABORATIONS PAGE JAVASCRIPT
+    // ===================================
+
+    const API_BASE_URL = window.location.origin + '/api';
+    let activeCollabs = [];
+    let pendingRequests = [];
+    let sentRequests = [];
+    let allCollabs = [];
+
+    const getAuthToken = () => localStorage.getItem('authToken');
+
+    const apiRequest = async (endpoint, options = {}) => {
+      const token = getAuthToken();
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { Authorization: `Bearer ${token}` })
+        },
+        ...options
+      };
+      
+      try {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.message || 'Request failed');
+        }
+        
+        return data;
+      } catch (error) {
+        console.error('API Request Error:', error);
+        throw error;
+      }
+    };
+
+    const timeAgo = (date) => {
+      const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+      
+      const intervals = {
+        year: 31536000,
+        month: 2592000,
+        week: 604800,
+        day: 86400,
+        hour: 3600,
+        minute: 60
+      };
+      
+      for (const [unit, secondsInUnit] of Object.entries(intervals)) {
+        const interval = Math.floor(seconds / secondsInUnit);
+        if (interval >= 1) {
+          return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+        }
+      }
+      
+      return 'Just now';
+    };
+
+    const getInitials = (name) => {
+      if (!name) return 'U';
+      return name.split(' ').map(n => n[0]).join('').toUpperCase();
+    };
+
+    const showToast = (message, type = 'success') => {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: var(--color-bg-card);
+        border: 2px solid ${type === 'success' ? 'var(--color-success)' : 'var(--color-error)'};
+        border-radius: 12px;
+        padding: 16px 24px;
+        box-shadow: var(--shadow-lg);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 300px;
+        animation: slideIn 0.3s ease;
+      `;
+      toast.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        <span>${message}</span>
+      `;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => toast.remove(), 3000);
+    };
+
+    // Create collaboration card
+    const createCollabCard = (collab, type = 'active') => {
+      // Determine collaborator info based on type
+      let collaboratorName, collaboratorSchool;
+      
+      if (type === 'sent') {
+        // For sent requests, show the POST AUTHOR (person we're requesting from)
+        collaboratorName = collab.userName || collab.authorName || 'Unknown User';
+        collaboratorSchool = collab.userSchool || collab.authorSchool || 'Unknown School';
+      } else {
+        // For received requests, show the REQUESTER
+        collaboratorName = collab.userName || collab.authorName || 'Unknown User';
+        collaboratorSchool = collab.userSchool || collab.authorSchool || 'Unknown School';
+      }
+      
+      console.log(`🎨 Creating ${type} card:`, {
+        postTitle: collab.postTitle,
+        collaboratorName,
+        status: collab.status
+      });
+      
+      return `
+        <div class="collab-card">
+          <div class="collab-card-header">
+            <div class="collab-project-title">
+              <i class="fas fa-folder"></i>
+              ${collab.postTitle || 'Untitled Project'}
+              <span class="project-status status-${collab.status}">${collab.status}</span>
+            </div>
+          </div>
+          
+          <div class="collab-card-body">
+            <div class="collaborator-info">
+              <div class="collaborator-avatar">${getInitials(collaboratorName)}</div>
+              <div class="collaborator-details">
+                <span class="collaborator-name">${collaboratorName}</span>
+                <span class="collaborator-school">${collaboratorSchool}</span>
+              </div>
+            </div>
+
+            ${collab.message ? `
+              <div class="collab-message">
+                <i class="fas fa-quote-left" style="font-size: 12px; opacity: 0.5;"></i>
+                ${collab.message}
+              </div>
+            ` : ''}
+
+            <div class="collab-meta">
+              <span class="collab-meta-item">
+                <i class="fas fa-calendar"></i>
+                ${timeAgo(collab.createdAt)}
+              </span>
+              ${collab.acceptedAt ? `
+                <span class="collab-meta-item">
+                  <i class="fas fa-check"></i>
+                  Accepted ${timeAgo(collab.acceptedAt)}
+                </span>
+              ` : ''}
+            </div>
+
+            <div class="collab-actions">
+              ${type === 'active' ? `
+                <button class="collab-btn btn-view-project" onclick="viewProject('${collab.postId}')">
+                  <i class="fas fa-eye"></i> View Project
+                </button>
+                <button class="collab-btn btn-message" onclick="messageCollaborator('${collab.userId}')">
+                  <i class="fas fa-comments"></i> Message
+                </button>
+              ` : type === 'pending' ? `
+                <button class="collab-btn btn-view-project" onclick="handleRequest('${collab.postId}', '${collab._id}', 'accepted')" style="background: var(--color-success);">
+                  <i class="fas fa-check"></i> Accept
+                </button>
+                <button class="collab-btn btn-end-collab" onclick="handleRequest('${collab.postId}', '${collab._id}', 'rejected')">
+                  <i class="fas fa-times"></i> Decline
+                </button>
+              ` : type === 'sent' ? `
+                <button class="collab-btn btn-view-project" onclick="viewProject('${collab.postId}')">
+                  <i class="fas fa-eye"></i> View Project
+                </button>
+                ${collab.status === 'pending' ? `
+                  <button class="collab-btn btn-end-collab" onclick="cancelRequest('${collab.postId}', '${collab._id}')">
+                    <i class="fas fa-times"></i> Cancel
+                  </button>
+                ` : ''}
+              ` : `
+                <button class="collab-btn btn-view-project" onclick="viewProject('${collab.postId}')">
+                  <i class="fas fa-eye"></i> View Project
+                </button>
+              `}
+            </div>
+          </div>
+        </div>
+      `;
+    };
+
+    // Load all collaborations
+    const loadCollaborations = async () => {
+      try {
+        console.log('🔄 Loading all collaborations...');
+        
+        // Load all collaboration requests RECEIVED by user
+        const response = await apiRequest('/collaborations/requests');
+        
+        if (response.success && response.data) {
+          allCollabs = response.data.map(req => ({
+            ...req,
+            // Normalize data structure
+            authorName: req.userName,
+            authorSchool: req.userSchool
+          }));
+          
+          console.log(`✅ Loaded ${allCollabs.length} received collaboration requests`);
+          
+          // Separate into categories
+          activeCollabs = allCollabs.filter(c => c.status === 'accepted');
+          pendingRequests = allCollabs.filter(c => c.status === 'pending');
+          
+          console.log(`📊 Active: ${activeCollabs.length}, Pending: ${pendingRequests.length}`);
+          
+          // Update stats
+          document.getElementById('activeCollabsCount').textContent = activeCollabs.length;
+          document.getElementById('pendingRequestsCount').textContent = pendingRequests.length;
+          document.getElementById('totalCollabsCount').textContent = allCollabs.length;
+          
+          // Render each section
+          renderActiveCollabs();
+          renderPendingRequests();
+          renderHistory();
+        } else {
+          console.warn('⚠️ No collaboration requests received');
+          allCollabs = [];
+          activeCollabs = [];
+          pendingRequests = [];
+          
+          document.getElementById('activeCollabsCount').textContent = 0;
+          document.getElementById('pendingRequestsCount').textContent = 0;
+          document.getElementById('totalCollabsCount').textContent = 0;
+          
+          renderActiveCollabs();
+          renderPendingRequests();
+          renderHistory();
+        }
+        
+        // Also load sent requests
+        await loadSentRequests();
+        
+      } catch (error) {
+        console.error('❌ Error loading collaborations:', error);
+        showToast('Failed to load collaborations', 'error');
+      }
+    };
+
+    const loadSentRequests = async () => {
+      try {
+        console.log('📤 Loading sent collaboration requests...');
+        
+        // Get collaboration requests sent by the user
+        const response = await apiRequest('/collaborations/sent');
+        
+        if (response.success && response.data) {
+          sentRequests = response.data.map(req => ({
+            _id: req._id,
+            postId: req.postId,
+            postTitle: req.postTitle,
+            userName: req.postAuthor,
+            userSchool: req.postAuthorSchool,
+            authorName: req.postAuthor,
+            authorSchool: req.postAuthorSchool,
+            message: req.message,
+            status: req.status,
+            createdAt: req.createdAt
+          }));
+          
+          console.log(`✅ Loaded ${sentRequests.length} sent requests`);
+          
+          document.getElementById('sentRequestsCount').textContent = sentRequests.filter(r => r.status === 'pending').length;
+          renderSentRequests();
+        } else {
+          sentRequests = [];
+          document.getElementById('sentRequestsCount').textContent = 0;
+          renderSentRequests();
+        }
+      } catch (error) {
+        console.error('❌ Error loading sent requests:', error);
+        sentRequests = [];
+        document.getElementById('sentRequestsCount').textContent = 0;
+        renderSentRequests();
+      }
+    };
+
+    const renderActiveCollabs = () => {
+      const grid = document.getElementById('activeCollabsGrid');
+      
+      if (activeCollabs.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-handshake"></i>
+            <h3>No active collaborations</h3>
+            <p>Start collaborating on projects from the Community page!</p>
+          </div>
+        `;
+        return;
+      }
+      
+      grid.innerHTML = activeCollabs.map(c => createCollabCard(c, 'active')).join('');
+    };
+
+    const renderPendingRequests = () => {
+      const grid = document.getElementById('pendingRequestsGrid');
+      
+      if (pendingRequests.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-clock"></i>
+            <h3>No pending requests</h3>
+            <p>You don't have any collaboration requests waiting for your approval.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      grid.innerHTML = pendingRequests.map(c => createCollabCard(c, 'pending')).join('');
+    };
+
+    const renderSentRequests = () => {
+      const grid = document.getElementById('sentRequestsGrid');
+      
+      console.log('🎨 Rendering sent requests:', sentRequests.length);
+      
+      if (sentRequests.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-paper-plane"></i>
+            <h3>No sent requests</h3>
+            <p>You haven't sent any collaboration requests yet. Visit the Community page to find projects to collaborate on!</p>
+          </div>
+        `;
+        return;
+      }
+      
+      grid.innerHTML = sentRequests.map(c => createCollabCard(c, 'sent')).join('');
+      console.log('✅ Sent requests rendered successfully');
+    };
+
+    const renderHistory = () => {
+      const grid = document.getElementById('historyGrid');
+      
+      if (allCollabs.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-history"></i>
+            <h3>No collaboration history</h3>
+            <p>Your collaboration history will appear here.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      grid.innerHTML = allCollabs.map(c => createCollabCard(c, 'history')).join('');
+    };
+
+    // Handle collaboration request
+    const handleRequest = async (postId, requestId, status) => {
+      try {
+        await apiRequest(`/collaborations/${postId}/${requestId}`, {
+          method: 'PUT',
+          body: JSON.stringify({ status })
+        });
+        
+        showToast(`Request ${status}!`, 'success');
+        loadCollaborations();
+      } catch (error) {
+        console.error('Error handling request:', error);
+        showToast('Failed to update request', 'error');
+      }
+    };
+
+    // View project
+    const viewProject = (postId) => {
+      window.location.href = `community.html?post=${postId}`;
+    };
+
+    // Message collaborator
+    const messageCollaborator = (userId) => {
+      showToast('Messaging feature coming soon!', 'success');
+    };
+
+    // Cancel sent request
+    const cancelRequest = async (postId, requestId) => {
+      if (!confirm('Are you sure you want to cancel this collaboration request?')) {
+        return;
+      }
+      
+      try {
+        await apiRequest(`/collaborations/${postId}/${requestId}`, {
+          method: 'DELETE'
+        });
+        
+        showToast('Request cancelled successfully', 'success');
+        loadCollaborations();
+      } catch (error) {
+        console.error('Error cancelling request:', error);
+        showToast('Failed to cancel request', 'error');
+      }
+    };
+
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove active from all tabs
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        // Add active to clicked tab
+        btn.classList.add('active');
+        const tabName = btn.dataset.tab;
+        document.getElementById(`${tabName}Tab`).classList.add('active');
+      });
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🚀 Collaborations page initialized');
+      loadCollaborations();
+    });
+
+    // Navigation functions (needed for sidebar)
+    function navigateToMyProjects() {
+      window.location.href = 'my_projects.html';
+    }
+
+    function navigateToCommunity() {
+      window.location.href = 'community.html';
+    }
+
+    function navigateToSchoolChat() {
+      window.location.href = 'school_chat.html';
+    }
+
+    function logout() {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userData');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

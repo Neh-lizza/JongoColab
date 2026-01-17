@@ -172,7 +172,28 @@ viewBtns.forEach(btn => {
 // FIXED NOTIFICATION FUNCTIONS FOR STUDENT_DB.JS
 // Replace the notification section in your student_db.js with this
 // ========================
-
+// Helper function to format time ago
+function timeAgo(date) {
+  const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+  
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    week: 604800,
+    day: 86400,
+    hour: 3600,
+    minute: 60
+  };
+  
+  for (const [unit, secondsInUnit] of Object.entries(intervals)) {
+    const interval = Math.floor(seconds / secondsInUnit);
+    if (interval >= 1) {
+      return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+    }
+  }
+  
+  return 'Just now';
+}
 let collaborationRequests = [];
 
 async function loadCollaborationRequests() {
@@ -183,24 +204,40 @@ async function loadCollaborationRequests() {
       return;
     }
     
+    console.log('📡 Loading collaboration requests...');
+    
     const response = await fetch(window.location.origin + '/api/collaborations/requests', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     });
     
-    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     
-    if (data.success) {
+    const data = await response.json();
+    console.log('✅ Collaboration data received:', data);
+    
+    if (data.success && data.data) {
       collaborationRequests = data.data;
+      console.log('📊 Total requests:', collaborationRequests.length);
+      updateNotificationBadge();
+      renderNotifications();
+    } else {
+      console.warn('⚠️ No collaboration data in response');
+      collaborationRequests = [];
       updateNotificationBadge();
       renderNotifications();
     }
   } catch (error) {
-    console.error('Error loading requests:', error);
+    console.error('❌ Error loading requests:', error);
+    const list = document.getElementById('notificationList');
+    if (list) {
+      list.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--color-error);">Failed to load notifications</p>';
+    }
   }
 }
-
 function updateNotificationBadge() {
   const dot = document.getElementById('notificationDot');
   

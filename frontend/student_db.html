@@ -45,33 +45,13 @@
     <span class="badge-count">3</span>
   </a>
 </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" data-page="collaborations">
-            <i class="fas fa-handshake"></i>
-            <span>Collaborations</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" data-page="analytics">
-            <i class="fas fa-chart-pie"></i>
-            <span>Analytics</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" data-page="resources">
-            <i class="fas fa-book"></i>
-            <span>Resources</span>
-          </a>
-        </li>
-      </ul>
-
-      <div class="upgrade-card">
-        <i class="fas fa-crown"></i>
-        <h3>Upgrade to Pro</h3>
-        <p>Unlock premium features and unlimited storage</p>
-        <button class="btn-upgrade">Upgrade Now</button>
-      </div>
-
+   <li class="nav-item">
+  <a href="#" class="nav-link" onclick="navigateToCollaborations(); return false;">
+    <i class="fas fa-handshake"></i>
+    <span>Collaborations</span>
+  </a>
+</li>
+       
       <ul class="nav-menu nav-bottom">
         <li class="nav-item">
           <a href="#" class="nav-link" data-page="settings">
@@ -447,5 +427,25 @@
 <div id="alertContainer" class="alert-container"></div>
 <script src="js/auth.js"></script>
 <script src="js/student_db.js"></script>
+<script>
+  // Add to window for sidebar navigation
+window.navigateToCollaborations = function() {
+  window.location.href = 'collaborations.html';
+};
+
+window.navigateToMyProjects = function() {
+  window.location.href = 'my_projects.html';
+};
+
+window.navigateToSchoolChat = function() {
+  window.location.href = 'school_chat.html';
+};
+
+window.logout = function() {
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('userData');
+  window.location.href = 'index.html';
+};
+</script>
 </body>
 </html>
