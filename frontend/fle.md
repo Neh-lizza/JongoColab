@@ -1,4 +1,5 @@
-frontend
+frontend-/
+community.html
 auth.html
 chat.html
 explore.html
