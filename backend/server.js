@@ -95,11 +95,11 @@ app.get('/student_db.html', (req, res) => {
 
 // Community page
 app.get('/community', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend', 'Community.html'));
+  res.sendFile(path.join(__dirname, '../frontend', 'community.html'));
 });
 
-app.get('/Community.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend', 'Community.html'));
+app.get('/community.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend', 'community.html'));
 });
 
 // Index/Landing page
