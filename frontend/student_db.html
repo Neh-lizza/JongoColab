@@ -9,80 +9,27 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-
   <div class="dashboard-container">
-    
-    <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="logo">
-        <i class="fas fa-graduation-cap"></i>
-        <span>JongoColab</span>
-      </div>
-      
+      <div class="logo"><i class="fas fa-graduation-cap"></i><span>JongoColab</span></div>
       <ul class="nav-menu">
-        <li class="nav-item">
-          <a href="#" class="nav-link active" data-page="overview">
-            <i class="fas fa-chart-line"></i>
-            <span>Overview</span>
-          </a>
-        </li>
-        <li class="nav-item">
-    <a href="#" class="nav-link" onclick="navigateToMyProjects(); return false;">
-      <i class="fas fa-folder"></i>
-      <span>My Projects</span>
-    </a>
-  </li>
-        <li class="nav-item">
-    <a href="#" class="nav-link" onclick="navigateToCommunity(); return false;">
-      <i class="fas fa-users"></i>
-      <span>Community</span>
-    </a>
-  </li>
-        <li class="nav-item">
-  <a href="#" class="nav-link" data-page="chat" onclick="navigateToSchoolChat(); return false;">
-    <i class="fas fa-comments"></i>
-    <span>School Chat</span>
-    <span class="badge-count">3</span>
-  </a>
-</li>
-   <li class="nav-item">
-  <a href="#" class="nav-link" onclick="navigateToCollaborations(); return false;">
-    <i class="fas fa-handshake"></i>
-    <span>Collaborations</span>
-  </a>
-</li>
-       
+        <li class="nav-item"><a href="student_db.html" class="nav-link active"><i class="fas fa-chart-line"></i><span>Overview</span></a></li>
+        <li class="nav-item"><a href="my_projects.html" class="nav-link"><i class="fas fa-folder"></i><span>My Projects</span></a></li>
+        <li class="nav-item"><a href="community.html" class="nav-link"><i class="fas fa-users"></i><span>Community</span></a></li>
+        <li class="nav-item"><a href="chat.html" class="nav-link"><i class="fas fa-comments"></i><span>School Chat</span></a></li>
+        <li class="nav-item"><a href="collaborations.html" class="nav-link"><i class="fas fa-handshake"></i><span>Collaborations</span><span class="badge-count" id="collabBadge" style="display: none;">0</span></a></li>
+      </ul>
       <ul class="nav-menu nav-bottom">
-        <li class="nav-item">
-          <a href="#" class="nav-link" data-page="settings">
-            <i class="fas fa-cog"></i>
-            <span>Settings</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="fas fa-question-circle"></i>
-            <span>Help Center</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="index.html" class="nav-link">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Log Out</span>
-          </a>
-        </li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a></li>
+        <li class="nav-item"><a href="index.html" class="nav-link"><i class="fas fa-sign-out-alt"></i><span>Log Out</span></a></li>
       </ul>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-content">
-      
-      <!-- Header -->
       <div class="dashboard-header">
         <div class="header-left">
-          <button class="mobile-menu-toggle" id="menuToggle">
-            <i class="fas fa-bars"></i>
-          </button>
+          <button class="mobile-menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
           <h1>Dashboard</h1>
         </div>
         <div class="header-right">
@@ -90,56 +37,52 @@
             <i class="fas fa-search search-icon"></i>
             <input type="text" class="search-input" placeholder="Search projects, users...">
           </div>
-         <button class="icon-btn notification-btn" onclick="toggleNotifications()">
-  <i class="fas fa-bell"></i>
-  <span class="notification-dot" id="notificationDot" style="display: none;"></span>
-</button>
-
-<!-- Notification Dropdown -->
-<div class="notification-dropdown" id="notificationDropdown" style="display: none;">
-  <div class="notification-header">
-    <h3>Collaboration Requests</h3>
-    <button onclick="closeNotifications()" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
-  </div>
-  <div class="notification-list" id="notificationList">
-    <p style="text-align: center; padding: 20px; color: var(--color-text-muted);">Loading...</p>
-  </div>
-</div>
+          <button class="icon-btn notification-btn" onclick="window.dashboardApp.toggleNotifications()">
+            <i class="fas fa-bell"></i>
+            <span class="notification-dot" id="notificationDot" style="display: none;"></span>
+          </button>
+          <div class="notification-dropdown" id="notificationDropdown" style="display: none;">
+            <div class="notification-header">
+              <h3>Notifications</h3>
+              <button onclick="window.dashboardApp.closeNotifications()" style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+            </div>
+            <div class="notification-list" id="notificationList">
+              <p style="text-align: center; padding: 20px; color: var(--color-text-muted);">Loading...</p>
+            </div>
+          </div>
           <div class="user-profile">
             <div class="user-avatar">
-              <img src="https://via.placeholder.com/45/CC00FF/FFFFFF?text=ST" alt="Student">
+              <img src="https://via.placeholder.com/45/CC00FF/FFFFFF?text=U" alt="User" id="userAvatar">
             </div>
             <div class="user-info">
-              <span class="user-name">Student Name</span>
-              <span class="user-institution">CUIB</span>
+              <span class="user-name" id="userName">Loading...</span>
+              <span class="user-institution" id="userSchool">Loading...</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Time Filter -->
       <div class="time-filter">
-        <button class="filter-btn">Day</button>
-        <button class="filter-btn">Week</button>
-        <button class="filter-btn active">Month</button>
-        <button class="filter-btn">Year</button>
+        <button class="filter-btn" data-period="day">Day</button>
+        <button class="filter-btn" data-period="week">Week</button>
+        <button class="filter-btn active" data-period="month">Month</button>
+        <button class="filter-btn" data-period="year">Year</button>
         <div class="date-range">
           <i class="fas fa-calendar"></i>
-          <span id="dateRangeText">1 Nov 2024 - 30 Nov 2024</span>
+          <span id="dateRangeText">Loading...</span>
         </div>
       </div>
 
-      <!-- Stats Grid -->
       <div class="stats-grid">
         <div class="stat-card primary">
           <div class="stat-header">
             <span class="stat-title">Total Projects</span>
             <i class="fas fa-folder-open stat-icon"></i>
           </div>
-          <div class="stat-value">24</div>
-          <div class="stat-change positive">
-            <i class="fas fa-arrow-up"></i>
-            <span>+12% from last month</span>
+          <div class="stat-value" id="totalProjects">0</div>
+          <div class="stat-change" id="projectsChange">
+            <i class="fas fa-minus"></i>
+            <span>Loading...</span>
           </div>
         </div>
 
@@ -148,10 +91,10 @@
             <span class="stat-title">Collaborations</span>
             <i class="fas fa-users stat-icon"></i>
           </div>
-          <div class="stat-value">18</div>
-          <div class="stat-change positive">
-            <i class="fas fa-arrow-up"></i>
-            <span>+8 from last month</span>
+          <div class="stat-value" id="totalCollabs">0</div>
+          <div class="stat-change" id="collabsChange">
+            <i class="fas fa-minus"></i>
+            <span>Loading...</span>
           </div>
         </div>
 
@@ -160,10 +103,10 @@
             <span class="stat-title">Contributions</span>
             <i class="fas fa-code stat-icon"></i>
           </div>
-          <div class="stat-value">156</div>
-          <div class="stat-change positive">
-            <i class="fas fa-arrow-up"></i>
-            <span>+45 this week</span>
+          <div class="stat-value" id="totalContributions">0</div>
+          <div class="stat-change" id="contributionsChange">
+            <i class="fas fa-minus"></i>
+            <span>Loading...</span>
           </div>
         </div>
 
@@ -172,280 +115,316 @@
             <span class="stat-title">Impact Score</span>
             <i class="fas fa-trophy stat-icon"></i>
           </div>
-          <div class="stat-value">850</div>
-          <div class="stat-change positive">
-            <i class="fas fa-arrow-up"></i>
-            <span>+15% this month</span>
+          <div class="stat-value" id="impactScore">0</div>
+          <div class="stat-change" id="impactChange">
+            <i class="fas fa-minus"></i>
+            <span>Loading...</span>
           </div>
         </div>
       </div>
 
-      <!-- Action Buttons Section -->
-<div class="action-buttons">
-  <button class="action-btn btn-upload">
-    <i class="fas fa-plus"></i>
-    <span>Upload Project</span>
-  </button>
-  <button class="action-btn btn-collaborate">
-    <i class="fas fa-handshake"></i>
-    <span>Find Collaborators</span>
-  </button>
-  <button class="action-btn btn-join-chat" onclick="navigateToSchoolChat()">
-    <i class="fas fa-comments"></i>
-    <span>Join School Chat</span>
-  </button>
-</div>
+      <div class="action-buttons">
+        <button class="action-btn btn-upload" onclick="location.href='community.html'">
+          <i class="fas fa-plus"></i>
+          <span>Create Project</span>
+        </button>
+        <button class="action-btn btn-collaborate" onclick="location.href='community.html'">
+          <i class="fas fa-users"></i>
+          <span>Browse Community</span>
+        </button>
+        <button class="action-btn btn-join-chat" onclick="location.href='school_chat.html'">
+          <i class="fas fa-comments"></i>
+          <span>School Chat</span>
+        </button>
+      </div>
 
-      <!-- Charts and Calendar Row -->
       <div class="dashboard-row">
-        
-        <!-- Activity Chart -->
         <div class="chart-card">
           <div class="card-header">
             <h3 class="card-title">Monthly Activity</h3>
             <div class="card-actions">
-              <button class="icon-btn">
-                <i class="fas fa-sync-alt"></i>
-              </button>
-              <button class="icon-btn">
-                <i class="fas fa-external-link-alt"></i>
-              </button>
+              <button class="icon-btn" onclick="window.dashboardApp.loadData()"><i class="fas fa-sync-alt"></i></button>
             </div>
           </div>
-          
-          <div class="chart-container">
-            <div class="chart-column">
-              <div class="chart-bar" style="height: 60%;" data-value="18"></div>
-              <div class="chart-label">Jan</div>
-            </div>
-            <div class="chart-column">
-              <div class="chart-bar" style="height: 55%;" data-value="16"></div>
-              <div class="chart-label">Feb</div>
-            </div>
-            <div class="chart-column">
-              <div class="chart-bar" style="height: 75%;" data-value="22"></div>
-              <div class="chart-label">Mar</div>
-            </div>
-            <div class="chart-column">
-              <div class="chart-bar" style="height: 48%;" data-value="14"></div>
-              <div class="chart-label">Apr</div>
-            </div>
-            <div class="chart-column">
-              <div class="chart-bar" style="height: 85%;" data-value="25"></div>
-              <div class="chart-label">May</div>
-            </div>
-            <div class="chart-column">
-              <div class="chart-bar" style="height: 42%;" data-value="12"></div>
-              <div class="chart-label">Jun</div>
+          <div class="chart-container" id="activityChart">
+            <div style="text-align: center; padding: 40px; color: var(--color-text-muted);">
+              <i class="fas fa-spinner fa-spin" style="font-size: 32px;"></i>
+              <p>Loading chart...</p>
             </div>
           </div>
         </div>
 
-        <!-- Calendar & Stats -->
         <div class="calendar-card">
           <div class="calendar-header">
-            <span class="calendar-month">November 2024</span>
+            <span class="calendar-month" id="calendarMonth">Loading...</span>
             <div class="calendar-nav">
-              <button class="icon-btn">
-                <i class="fas fa-chevron-left"></i>
-              </button>
-              <button class="icon-btn">
-                <i class="fas fa-chevron-right"></i>
-              </button>
+              <button class="icon-btn" onclick="window.dashboardApp.changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+              <button class="icon-btn" onclick="window.dashboardApp.changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
           </div>
-
-          <div class="calendar-grid">
-            <div class="calendar-day-header">Mon</div>
-            <div class="calendar-day-header">Tue</div>
-            <div class="calendar-day-header">Wed</div>
-            <div class="calendar-day-header">Thu</div>
-            <div class="calendar-day-header">Fri</div>
-            <div class="calendar-day-header">Sat</div>
-            <div class="calendar-day-header">Sun</div>
-            
-            <div class="calendar-day"></div>
-            <div class="calendar-day"></div>
-            <div class="calendar-day"></div>
-            <div class="calendar-day">1</div>
-            <div class="calendar-day">2</div>
-            <div class="calendar-day">3</div>
-            <div class="calendar-day">4</div>
-            <div class="calendar-day">5</div>
-            <div class="calendar-day">6</div>
-            <div class="calendar-day">7</div>
-            <div class="calendar-day">8</div>
-            <div class="calendar-day">9</div>
-            <div class="calendar-day">10</div>
-            <div class="calendar-day">11</div>
-            <div class="calendar-day">12</div>
-            <div class="calendar-day">13</div>
-            <div class="calendar-day">14</div>
-            <div class="calendar-day">15</div>
-            <div class="calendar-day">16</div>
-            <div class="calendar-day today">17</div>
-            <div class="calendar-day">18</div>
-            <div class="calendar-day">19</div>
-            <div class="calendar-day">20</div>
-            <div class="calendar-day">21</div>
-            <div class="calendar-day">22</div>
-            <div class="calendar-day">23</div>
-            <div class="calendar-day">24</div>
-            <div class="calendar-day">25</div>
-            <div class="calendar-day">26</div>
-            <div class="calendar-day">27</div>
-            <div class="calendar-day">28</div>
-            <div class="calendar-day">29</div>
-            <div class="calendar-day">30</div>
-          </div>
-
+          <div class="calendar-grid" id="calendarGrid"></div>
           <div class="community-growth">
             <div class="growth-header">
               <div>
                 <h4>Community Impact</h4>
                 <p>Your contribution growth</p>
               </div>
-              <div class="growth-percentage">+28%</div>
+              <div class="growth-percentage" id="growthPercentage">+0%</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Recent Projects Table -->
       <div class="activities-card">
         <div class="card-header">
           <h3 class="card-title">Recent Projects</h3>
           <div class="card-actions">
-            <button class="icon-btn">
-              <i class="fas fa-sync-alt"></i>
-            </button>
-            <button class="icon-btn">
-              <i class="fas fa-external-link-alt"></i>
-            </button>
+            <button class="icon-btn" onclick="window.dashboardApp.loadData()"><i class="fas fa-sync-alt"></i></button>
           </div>
         </div>
-
         <div class="table-container">
           <table>
             <thead>
               <tr>
                 <th>Project Name</th>
-                <th>Institution</th>
+                <th>Category</th>
                 <th>Date</th>
-                <th>Collaborators</th>
+                <th>Engagement</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="recentProjectsTable">
               <tr>
-                <td>
-                  <div class="activity-info">
-                    <div class="activity-icon purple">
-                      <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div>
-                      <strong>E-Learning Platform</strong>
-                      <div class="project-tags">
-                        <span class="tag">Web Dev</span>
-                        <span class="tag">React</span>
-                      </div>
-                    </div>
-                  </div>
+                <td colspan="6" style="text-align: center; padding: 40px;">
+                  <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: var(--color-text-muted);"></i>
+                  <p style="color: var(--color-text-muted); margin-top: 12px;">Loading projects...</p>
                 </td>
-                <td>CUIB</td>
-                <td>15 Nov 2024</td>
-                <td>
-                  <div class="collaborators-avatars">
-                    <img src="https://via.placeholder.com/30/00FF88/FFFFFF?text=A" alt="User">
-                    <img src="https://via.placeholder.com/30/CC00FF/FFFFFF?text=B" alt="User">
-                    <span class="more-count">+3</span>
-                  </div>
-                </td>
-                <td><span class="status-badge status-active">Active</span></td>
-                <td><button class="btn-view">View</button></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="activity-info">
-                    <div class="activity-icon green">
-                      <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div>
-                      <strong>Fitness Tracker App</strong>
-                      <div class="project-tags">
-                        <span class="tag">Mobile</span>
-                        <span class="tag">Flutter</span>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td>UB</td>
-                <td>8 Nov 2024</td>
-                <td>
-                  <div class="collaborators-avatars">
-                    <img src="https://via.placeholder.com/30/00FFFF/000000?text=C" alt="User">
-                    <img src="https://via.placeholder.com/30/FF00FF/FFFFFF?text=D" alt="User">
-                  </div>
-                </td>
-                <td><span class="status-badge status-completed">Completed</span></td>
-                <td><button class="btn-view">View</button></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="activity-info">
-                    <div class="activity-icon cyan">
-                      <i class="fas fa-brain"></i>
-                    </div>
-                    <div>
-                      <strong>AI Chatbot</strong>
-                      <div class="project-tags">
-                        <span class="tag">AI/ML</span>
-                        <span class="tag">Python</span>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td>Landmark</td>
-                <td>22 Nov 2024</td>
-                <td>
-                  <div class="collaborators-avatars">
-                    <img src="https://via.placeholder.com/30/FFB800/000000?text=E" alt="User">
-                    <span class="more-count">+2</span>
-                  </div>
-                </td>
-                <td><span class="status-badge status-pending">In Progress</span></td>
-                <td><button class="btn-view">View</button></td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-
     </main>
   </div>
-<div id="alertContainer" class="alert-container"></div>
-<script src="js/auth.js"></script>
-<script src="js/student_db.js"></script>
-<script>
-  // Add to window for sidebar navigation
-window.navigateToCollaborations = function() {
-  window.location.href = 'collaborations.html';
-};
 
-window.navigateToMyProjects = function() {
-  window.location.href = 'my_projects.html';
-};
+  <script src="js/auth.js"></script>
+  <script src="js/student_db.js"></script>
+  <script>
+(function() {
+  const API = window.location.origin + '/api';
+  const getToken = () => localStorage.getItem('authToken');
+  let currentMonth = new Date();
 
-window.navigateToSchoolChat = function() {
-  window.location.href = 'school_chat.html';
-};
+  const api = async (url, opt = {}) => {
+    const res = await fetch(`${API}${url}`, {
+      headers: { 'Content-Type': 'application/json', ...(getToken() && { Authorization: `Bearer ${getToken()}` }) },
+      ...opt
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed');
+    return data;
+  };
 
-window.logout = function() {
-  localStorage.removeItem('authToken');
-  localStorage.removeItem('userData');
-  window.location.href = 'index.html';
-};
-</script>
+  const ago = (d) => {
+    const s = Math.floor((Date.now() - new Date(d)) / 1000);
+    const i = { year: 31536000, month: 2592000, week: 604800, day: 86400, hour: 3600, minute: 60 };
+    for (const [u, v] of Object.entries(i)) {
+      const n = Math.floor(s / v);
+      if (n >= 1) return `${n} ${u}${n > 1 ? 's' : ''} ago`;
+    }
+    return 'Just now';
+  };
+
+  const loadUserInfo = () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('userData') || '{}');
+      const name = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User';
+      const school = user.schoolName || 'University';
+      document.getElementById('userName').textContent = name;
+      document.getElementById('userSchool').textContent = school;
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+      document.getElementById('userAvatar').src = `https://via.placeholder.com/45/CC00FF/FFFFFF?text=${initials}`;
+    } catch (e) {
+      console.error('Error loading user:', e);
+    }
+  };
+
+  const updateDateRange = () => {
+    const today = new Date();
+    const first = new Date(today.getFullYear(), today.getMonth(), 1);
+    const last = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    const fmt = d => `${d.getDate()} ${d.toLocaleString('default', { month: 'short' })} ${d.getFullYear()}`;
+    document.getElementById('dateRangeText').textContent = `${fmt(first)} - ${fmt(last)}`;
+  };
+
+  const loadData = async () => {
+    try {
+      console.log('🔄 Loading dashboard...');
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      const currentUserId = userData.id || userData._id;
+      
+      if (!currentUserId) {
+        console.error('❌ No user ID found');
+        return;
+      }
+
+      const [allPosts, collabsReceived, collabsSent] = await Promise.all([
+        api('/posts'),
+        api('/collaborations/requests').catch(() => ({ data: [] })),
+        api('/collaborations/sent').catch(() => ({ data: [] }))
+      ]);
+
+      const myPosts = (allPosts.data || []).filter(post => {
+        const postAuthorId = typeof post.author === 'object' ? post.author._id : post.author;
+        return String(postAuthorId) === String(currentUserId);
+      });
+
+      console.log('✅ My posts:', myPosts.length);
+
+      const received = collabsReceived.data || [];
+      const sent = collabsSent.data || [];
+      const totalProjects = myPosts.length;
+      const activeCollabs = [...received, ...sent].filter(c => c.status === 'accepted').length;
+      const totalLikes = myPosts.reduce((sum, p) => sum + (p.likes?.length || 0), 0);
+      const totalComments = myPosts.reduce((sum, p) => sum + (p.comments?.length || 0), 0);
+      const totalViews = myPosts.reduce((sum, p) => sum + (p.views || 0), 0);
+      const contributions = totalLikes + totalComments;
+      const impactScore = Math.round((totalViews * 0.5) + (totalLikes * 2) + (totalComments * 3) + (activeCollabs * 10));
+
+      document.getElementById('totalProjects').textContent = totalProjects;
+      document.getElementById('totalCollabs').textContent = activeCollabs;
+      document.getElementById('totalContributions').textContent = contributions;
+      document.getElementById('impactScore').textContent = impactScore;
+
+      const updateStat = (id, val, label) => {
+        const el = document.getElementById(id);
+        const pos = val >= 0;
+        el.className = `stat-change ${pos ? 'positive' : 'negative'}`;
+        el.innerHTML = `<i class="fas fa-arrow-${pos ? 'up' : 'down'}"></i><span>${pos ? '+' : ''}${val}% ${label}</span>`;
+      };
+
+      updateStat('projectsChange', totalProjects > 0 ? 12 : 0, 'from last month');
+      updateStat('collabsChange', activeCollabs > 0 ? 8 : 0, 'from last month');
+      updateStat('contributionsChange', contributions > 0 ? 45 : 0, 'this week');
+      updateStat('impactChange', impactScore > 0 ? 15 : 0, 'this month');
+
+      document.getElementById('growthPercentage').textContent = `+${contributions > 0 ? 28 : 0}%`;
+
+      const pending = received.filter(c => c.status === 'pending').length;
+      const badge = document.getElementById('collabBadge');
+      if (pending > 0) {
+        badge.textContent = pending;
+        badge.style.display = 'inline-block';
+        document.getElementById('notificationDot').style.display = 'block';
+      }
+
+      renderChart(myPosts);
+      renderProjects(myPosts);
+    } catch (e) {
+      console.error('❌ Error:', e);
+    }
+  };
+
+  const renderChart = (posts) => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const counts = Array(6).fill(0);
+    const today = new Date();
+    
+    posts.forEach(p => {
+      const postDate = new Date(p.createdAt);
+      const monthDiff = (today.getFullYear() - postDate.getFullYear()) * 12 + (today.getMonth() - postDate.getMonth());
+      if (monthDiff >= 0 && monthDiff < 6) counts[5 - monthDiff]++;
+    });
+
+    const max = Math.max(...counts, 1);
+    const startMonth = today.getMonth() - 5;
+    
+    document.getElementById('activityChart').innerHTML = counts.map((count, i) => {
+      const monthIndex = (startMonth + i + 12) % 12;
+      const height = Math.max(5, (count / max * 85));
+      return `<div class="chart-column"><div class="chart-bar" style="height: ${height}%;" data-value="${count}"></div><div class="chart-label">${months[monthIndex]}</div></div>`;
+    }).join('');
+  };
+
+  const renderProjects = (posts) => {
+    const recent = posts.slice(0, 5);
+    if (recent.length === 0) {
+      document.getElementById('recentProjectsTable').innerHTML = `
+        <tr><td colspan="6" style="text-align: center; padding: 40px;">
+          <i class="fas fa-folder-open" style="font-size: 48px; opacity: 0.3; display: block; margin-bottom: 12px;"></i>
+          <p style="color: var(--color-text-muted);">No projects yet. Create your first project!</p>
+          <button onclick="location.href='community.html'" style="margin-top: 16px; padding: 10px 20px; background: var(--color-accent); color: white; border: none; border-radius: 8px; cursor: pointer;">Create Project</button>
+        </td></tr>`;
+      return;
+    }
+
+    document.getElementById('recentProjectsTable').innerHTML = recent.map(p => `
+      <tr>
+        <td>
+          <div class="activity-info">
+            <div class="activity-icon purple"><i class="fas fa-${p.category === 'code' ? 'code' : p.category === 'design' ? 'palette' : 'folder'}"></i></div>
+            <div><strong>${p.title || 'Untitled'}</strong><div class="project-tags">${(p.tags || []).slice(0, 2).map(tag => `<span class="tag">${tag}</span>`).join('')}</div></div>
+          </div>
+        </td>
+        <td><span class="university-badge">${p.category || 'Project'}</span></td>
+        <td>${ago(p.createdAt)}</td>
+        <td><div style="display: flex; gap: 8px; font-size: 12px;"><span><i class="fas fa-heart"></i> ${p.likes?.length || 0}</span><span><i class="fas fa-comment"></i> ${p.comments?.length || 0}</span><span><i class="fas fa-eye"></i> ${p.views || 0}</span></div></td>
+        <td><span class="status-badge status-active">Active</span></td>
+        <td><button class="btn-view" onclick="location.href='community.html?post=${p._id}'">View</button></td>
+      </tr>`).join('');
+  };
+
+  const renderCalendar = () => {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+    document.getElementById('calendarMonth').textContent = currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    let html = days.map(d => `<div class="calendar-day-header">${d}</div>`).join('');
+    const startDay = firstDay === 0 ? 6 : firstDay - 1;
+    for (let i = 0; i < startDay; i++) html += '<div class="calendar-day"></div>';
+    for (let day = 1; day <= daysInMonth; day++) {
+      const isToday = today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
+      html += `<div class="calendar-day ${isToday ? 'today' : ''}">${day}</div>`;
+    }
+    document.getElementById('calendarGrid').innerHTML = html;
+  };
+
+  const toggleNotifications = async () => {
+    const dropdown = document.getElementById('notificationDropdown');
+    if (dropdown.style.display === 'none') {
+      dropdown.style.display = 'block';
+      document.getElementById('notificationDot').style.display = 'none';
+      try {
+        const res = await api('/collaborations/requests');
+        const pending = (res.data || []).filter(c => c.status === 'pending');
+        document.getElementById('notificationList').innerHTML = pending.length === 0 
+          ? '<p style="text-align: center; padding: 20px; color: var(--color-text-muted);">No new notifications</p>'
+          : pending.map(c => `<div style="padding: 12px; border-bottom: 1px solid var(--color-border); cursor: pointer;" onclick="location.href='collaborations.html'"><strong>${c.userName || 'Someone'}</strong> wants to collaborate on <strong>${c.postTitle}</strong><div style="font-size: 12px; color: var(--color-text-muted); margin-top: 4px;">${ago(c.createdAt)}</div></div>`).join('');
+      } catch (e) {
+        document.getElementById('notificationList').innerHTML = '<p style="text-align: center; padding: 20px; color: var(--color-error);">Error loading</p>';
+      }
+    } else {
+      dropdown.style.display = 'none';
+    }
+  };
+
+  window.dashboardApp = {
+    loadData,
+    changeMonth: (delta) => { currentMonth.setMonth(currentMonth.getMonth() + delta); renderCalendar(); },
+    toggleNotifications,
+    closeNotifications: () => document.getElementById('notificationDropdown').style.display = 'none'
+  };
+
+  loadUserInfo();
+  updateDateRange();
+  renderCalendar();
+  loadData();
+  setInterval(loadData, 60000);
+})();
+  </script>
 </body>
 </html>

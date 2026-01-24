@@ -1,5 +1,5 @@
 // ========================
-// DASHBOARD SCRIPTS
+// DASHBOARD SCRIPTS - CLEANED VERSION
 // ========================
 
 // Mobile Menu Toggle
@@ -23,6 +23,7 @@ document.addEventListener('click', (e) => {
     }
   }
 });
+
 // Navigation Active State
 const navLinks = document.querySelectorAll('.nav-link');
 
@@ -42,7 +43,6 @@ navLinks.forEach(link => {
         sidebar.classList.remove('open');
       }
       
-      // You can add page switching logic here
       console.log('Navigating to:', this.getAttribute('data-page'));
     }
   });
@@ -74,7 +74,6 @@ filterBtns.forEach(btn => {
     filterBtns.forEach(b => b.classList.remove('active'));
     this.classList.add('active');
     
-    // You can add filtering logic here
     console.log('Filter:', this.textContent);
   });
 });
@@ -104,7 +103,6 @@ chartBars.forEach(bar => {
       box-shadow: var(--shadow-lg);
     `;
     
-    // Add arrow
     const arrow = document.createElement('div');
     arrow.style.cssText = `
       position: absolute;
@@ -129,32 +127,7 @@ chartBars.forEach(bar => {
   });
 });
 
-// Action Buttons
-document.querySelector('.btn-upload')?.addEventListener('click', () => {
-  alert('Opening project upload form...');
-  // You can replace this with actual modal opening logic
-});
 
-document.querySelector('.btn-collaborate')?.addEventListener('click', () => {
-  alert('Finding collaborators...');
-  // Navigate to collaborations page
-});
-
-document.querySelector('.btn-join-chat')?.addEventListener('click', () => {
-  alert('Joining school chat room...');
-  // Navigate to chat page
-});
-
-// Calendar Navigation
-const calendarNav = document.querySelectorAll('.calendar-nav .icon-btn');
-
-calendarNav.forEach((btn, index) => {
-  btn.addEventListener('click', () => {
-    const direction = index === 0 ? 'prev' : 'next';
-    console.log(`Navigating ${direction} month`);
-    // Add calendar navigation logic here
-  });
-});
 
 // Table View Buttons
 const viewBtns = document.querySelectorAll('.btn-view');
@@ -164,14 +137,9 @@ viewBtns.forEach(btn => {
     const row = this.closest('tr');
     const projectName = row.querySelector('strong').textContent;
     alert(`Opening project: ${projectName}`);
-    // Navigate to project details page
   });
 });
 
-// ========================
-// FIXED NOTIFICATION FUNCTIONS FOR STUDENT_DB.JS
-// Replace the notification section in your student_db.js with this
-// ========================
 // Helper function to format time ago
 function timeAgo(date) {
   const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -194,201 +162,10 @@ function timeAgo(date) {
   
   return 'Just now';
 }
-let collaborationRequests = [];
-
-async function loadCollaborationRequests() {
-  try {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      console.log('No auth token found');
-      return;
-    }
-    
-    console.log('📡 Loading collaboration requests...');
-    
-    const response = await fetch(window.location.origin + '/api/collaborations/requests', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    console.log('✅ Collaboration data received:', data);
-    
-    if (data.success && data.data) {
-      collaborationRequests = data.data;
-      console.log('📊 Total requests:', collaborationRequests.length);
-      updateNotificationBadge();
-      renderNotifications();
-    } else {
-      console.warn('⚠️ No collaboration data in response');
-      collaborationRequests = [];
-      updateNotificationBadge();
-      renderNotifications();
-    }
-  } catch (error) {
-    console.error('❌ Error loading requests:', error);
-    const list = document.getElementById('notificationList');
-    if (list) {
-      list.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--color-error);">Failed to load notifications</p>';
-    }
-  }
-}
-function updateNotificationBadge() {
-  const dot = document.getElementById('notificationDot');
-  
-  // Check if element exists before trying to modify it
-  if (!dot) {
-    console.warn('Notification badge element not found');
-    return;
-  }
-  
-  const pendingCount = collaborationRequests.filter(r => r.status === 'pending').length;
-  
-  if (pendingCount > 0) {
-    dot.style.display = 'block';
-  } else {
-    dot.style.display = 'none';
-  }
-}
-
-function toggleNotifications() {
-  const dropdown = document.getElementById('notificationDropdown');
-  
-  if (!dropdown) {
-    console.warn('Notification dropdown element not found');
-    return;
-  }
-  
-  dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-  
-  if (dropdown.style.display === 'block') {
-    loadCollaborationRequests();
-  }
-}
-
-function closeNotifications() {
-  const dropdown = document.getElementById('notificationDropdown');
-  if (dropdown) {
-    dropdown.style.display = 'none';
-  }
-}
-
-function renderNotifications() {
-  const list = document.getElementById('notificationList');
-  
-  if (!list) {
-    console.warn('Notification list element not found');
-    return;
-  }
-  
-  if (collaborationRequests.length === 0) {
-    list.innerHTML = '<p style="text-align: center; padding: 40px; color: var(--color-text-muted);">No collaboration requests</p>';
-    return;
-  }
-  
-  list.innerHTML = collaborationRequests.map(req => `
-    <div class="notification-item">
-      <div class="notification-item-header">
-        <span class="notification-title">${req.userName}</span>
-        <span class="notification-time">${timeAgo(req.createdAt)}</span>
-      </div>
-      <p style="font-size: 12px; color: var(--color-accent); margin-bottom: 8px;">Project: ${req.postTitle}</p>
-      <p class="notification-message">${req.message}</p>
-      ${req.status === 'pending' ? `
-        <div class="notification-actions">
-          <button class="btn-accept" onclick="handleCollabRequest('${req.postId}', '${req._id}', 'accepted')">
-            <i class="fas fa-check"></i> Accept
-          </button>
-          <button class="btn-decline" onclick="handleCollabRequest('${req.postId}', '${req._id}', 'rejected')">
-            <i class="fas fa-times"></i> Decline
-          </button>
-        </div>
-      ` : `
-        <p style="font-size: 12px; color: ${req.status === 'accepted' ? 'var(--color-success)' : 'var(--color-error)'}; font-weight: 600;">
-          ${req.status === 'accepted' ? '✓ Accepted' : '✗ Declined'}
-        </p>
-      `}
-    </div>
-  `).join('');
-}
-
-async function handleCollabRequest(postId, requestId, status) {
-  try {
-    const token = localStorage.getItem('authToken');
-    const response = await fetch(`${window.location.origin}/api/collaborations/${postId}/${requestId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ status })
-    });
-    
-    const data = await response.json();
-    
-    if (data.success) {
-      showAlert(`Request ${status}!`, 'success');
-      loadCollaborationRequests();
-    }
-  } catch (error) {
-    console.error('Error handling request:', error);
-    showAlert('Failed to update request', 'error');
-  }
-}
-
-function showAlert(message, type) {
-  // Create a simple alert/toast
-  const alert = document.createElement('div');
-  alert.style.cssText = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 15px 20px;
-    background: ${type === 'success' ? 'var(--color-success)' : 'var(--color-error)'};
-    color: white;
-    border-radius: 8px;
-    z-index: 10000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  `;
-  alert.textContent = message;
-  document.body.appendChild(alert);
-  
-  setTimeout(() => {
-    alert.remove();
-  }, 3000);
-}
-
-// Load notifications on page load - but only if elements exist
-window.addEventListener('DOMContentLoaded', () => {
-  // Only initialize notifications if the required elements exist
-  const notificationBtn = document.querySelector('.notification-btn');
-  const notificationDropdown = document.getElementById('notificationDropdown');
-  
-  if (notificationBtn && notificationDropdown) {
-    loadCollaborationRequests();
-    // Reload every 30 seconds
-    setInterval(loadCollaborationRequests, 30000);
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!notificationDropdown.contains(e.target) && !notificationBtn.contains(e.target)) {
-        closeNotifications();
-      }
-    });
-  } else {
-    console.log('Notification elements not found on this page - skipping notification initialization');
-  }
-});
 
 // User Profile Click
 document.querySelector('.user-profile')?.addEventListener('click', () => {
   console.log('Opening user menu...');
-  // Open user dropdown menu
 });
 
 // Search Functionality
@@ -399,7 +176,6 @@ if (searchInput) {
     const query = e.target.value;
     if (query.length > 2) {
       console.log('Searching for:', query);
-      // Add search logic here
     }
   }, 500));
 }
@@ -447,14 +223,12 @@ document.querySelectorAll('.card-actions .icon-btn').forEach(btn => {
     const icon = this.querySelector('i');
     
     if (icon.classList.contains('fa-sync-alt')) {
-      // Rotate refresh icon
       icon.style.animation = 'spin 0.5s linear';
       setTimeout(() => {
         icon.style.animation = '';
       }, 500);
       
       console.log('Refreshing data...');
-      // Add refresh logic here
     }
   });
 });
