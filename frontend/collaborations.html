@@ -80,7 +80,7 @@
       <ul class="nav-menu">
         <li class="nav-item"><a href="student_db.html" class="nav-link"><i class="fas fa-chart-line"></i><span>Overview</span></a></li>
         <li class="nav-item"><a href="my_projects.html" class="nav-link"><i class="fas fa-folder"></i><span>My Projects</span></a></li>
-        <li class="nav-item"><a href="community.html" class="nav-link"><i class="fas fa-users"></i><span>Community</span></a></li>
+        <li class="nav-item"><a href="Community.html" class="nav-link"><i class="fas fa-users"></i><span>Community</span></a></li>
         <li class="nav-item"><a href="collaborations.html" class="nav-link active"><i class="fas fa-handshake"></i><span>Collaborations</span></a></li>
       </ul>
       <ul class="nav-menu nav-bottom">
@@ -218,9 +218,9 @@
       document.getElementById('pendingBadge').textContent = pending.length;
       document.getElementById('sentBadge').textContent = sent.filter(c => c.status === 'pending').length;
 
-      document.getElementById('pendingGrid').innerHTML = pending.length ? pending.map(c => card(c, 'pending')).join('') : empty('fa-inbox', 'No Pending Requests', 'You have no collaboration requests waiting.', 'Browse Community', 'location.href="community.html"');
-      document.getElementById('activeGrid').innerHTML = active.length ? active.map(c => card(c, 'active')).join('') : empty('fa-handshake', 'No Active Collaborations', 'Start collaborating on projects!', 'Browse Community', 'location.href="community.html"');
-      document.getElementById('sentGrid').innerHTML = sent.length ? sent.map(c => card(c, 'sent')).join('') : empty('fa-paper-plane', 'No Sent Requests', 'You haven\'t sent any collaboration requests yet.', 'Browse Community', 'location.href="community.html"');
+      document.getElementById('pendingGrid').innerHTML = pending.length ? pending.map(c => card(c, 'pending')).join('') : empty('fa-inbox', 'No Pending Requests', 'You have no collaboration requests waiting.', 'Browse Community', 'location.href="Community.html"');
+      document.getElementById('activeGrid').innerHTML = active.length ? active.map(c => card(c, 'active')).join('') : empty('fa-handshake', 'No Active Collaborations', 'Start collaborating on projects!', 'Browse Community', 'location.href="Community.html"');
+      document.getElementById('sentGrid').innerHTML = sent.length ? sent.map(c => card(c, 'sent')).join('') : empty('fa-paper-plane', 'No Sent Requests', 'You haven\'t sent any collaboration requests yet.', 'Browse Community', 'location.href="Community.html"');
       document.getElementById('historyGrid').innerHTML = all.length ? all.map(c => card(c, 'history')).join('') : empty('fa-history', 'No History', 'Your collaboration history will appear here.');
     };
 
@@ -260,7 +260,7 @@
       }
     };
 
-    window.view = (id) => location.href = `community.html?post=${id}`;
+    window.view = (id) => location.href = `Community.html?post=${id}`;
     window.msg = () => toast('Messaging coming soon!');
 
     document.querySelectorAll('.tab-btn').forEach(b => {

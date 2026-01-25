@@ -442,7 +442,7 @@ function updateUserProfile(userData) {
 }
 
 function navigateToCommunity() {
-    window.location.href = 'community.html';
+    window.location.href = 'Community.html';
 }
 
 function navigateToSchoolChat() {

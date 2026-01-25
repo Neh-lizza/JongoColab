@@ -95,11 +95,11 @@ app.get('/student_db.html', (req, res) => {
 
 // Community page
 app.get('/community', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend', 'community.html'));
+  res.sendFile(path.join(__dirname, '../frontend', 'Community.html'));
 });
 
-app.get('/community.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend', 'community.html'));
+app.get('/Community.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend', 'Community.html'));
 });
 
 // Index/Landing page
@@ -157,7 +157,7 @@ app.listen(PORT, () => {
   console.log(`🌐 Landing page: http://localhost:${PORT}`);
   console.log(`🔐 Auth page: http://localhost:${PORT}/auth.html`);
   console.log(`📊 Dashboard: http://localhost:${PORT}/student_db.html`);
-  console.log(`👥 Community: http://localhost:${PORT}/community.html`);
+  console.log(`👥 Community: http://localhost:${PORT}/Community.html`);
   console.log(`\n📡 Available API Endpoints:`);
   console.log(`   POST   /api/auth/register`);
   console.log(`   POST   /api/auth/login`);
