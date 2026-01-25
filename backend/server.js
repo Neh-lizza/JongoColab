@@ -24,8 +24,11 @@ const app = express();
 // ===================================
 
 // CORS Configuration
+// CHANGE TO:
 app.use(cors({
-  origin: ['http://localhost:5000', 'http://127.0.0.1:5000'],
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL || '*'] 
+    : ['http://localhost:5000', 'http://127.0.0.1:5000'],
   credentials: true
 }));
 
