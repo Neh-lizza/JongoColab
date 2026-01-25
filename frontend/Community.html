@@ -1433,7 +1433,7 @@ const handlePostSubmit = async (e) => {
     
     // Make API request
     console.log('🌐 Making API request...'); // DEBUG
-    const response = await fetch('http://localhost:5000/api/posts', {
+    const response = await fetch(`${API_BASE_URL}/posts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
